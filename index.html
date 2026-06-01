@@ -54,6 +54,16 @@
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
 
+  <!-- Global Loading Spinner Overlay -->
+  <div id="globalSpinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center space-y-4">
+    <!-- Tailwind SVG Spinner -->
+    <svg class="animate-spin h-14 w-14 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <p id="spinnerMessage" class="text-white text-sm font-semibold tracking-wide">Please wait...</p>
+  </div>
+
   <div class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
     <!-- Header -->
     <header class="flex flex-col md:flex-row justify-between items-center bg-white shadow-sm rounded-lg p-6 gap-4">
@@ -68,60 +78,57 @@
       </div>
     </header>
 
-    <!-- Simplified Modern Table-Like Statistics Dashboard -->
-    <section id="schoolSummarySection" class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hidden">
-      <h2 class="text-base font-semibold text-gray-900 border-b pb-2 mb-4 flex items-center gap-2">
+    <!-- Unified School Statistics Table Summary -->
+    <section id="schoolSummarySection" class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hidden space-y-6">
+      <h2 class="text-base font-semibold text-gray-900 border-b pb-2 flex items-center gap-2">
         <span>📊 School Statistics Summary</span>
       </h2>
       
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Grand Totals Stats Table (Left Column) -->
-        <div class="lg:col-span-5 space-y-4">
-          <div class="border rounded-lg overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200 text-sm">
-              <thead class="bg-gray-50 text-gray-600 font-medium">
+        <!-- Table 1: Division-wise Breakdown -->
+        <div class="lg:col-span-5 flex flex-col">
+          <h3 class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Division-wise Breakdown</h3>
+          <div class="overflow-x-auto border rounded-lg max-h-80">
+            <table class="min-w-full divide-y divide-gray-200 text-xs">
+              <thead class="bg-gray-50 sticky top-0 border-b">
                 <tr>
-                  <th class="px-4 py-2 text-left">Enrollment Indicator</th>
-                  <th class="px-4 py-2 text-right">Count</th>
+                  <th class="px-4 py-2 text-left font-semibold text-gray-600">Class and division</th>
+                  <th class="px-4 py-2 text-center font-semibold text-gray-600">M</th>
+                  <th class="px-4 py-2 text-center font-semibold text-gray-600">F</th>
+                  <th class="px-4 py-2 text-right font-semibold text-gray-600">Total</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-200 text-gray-700">
-                <tr>
-                  <td class="px-4 py-2.5 font-medium">Grand Total Students</td>
-                  <td class="px-4 py-2.5 text-right font-bold text-blue-600" id="statGrandTotal">0</td>
-                </tr>
-                <tr>
-                  <td class="px-4 py-2.5">Total Boys (M)</td>
-                  <td class="px-4 py-2.5 text-right font-semibold text-gray-900" id="statBoysCount">0</td>
-                </tr>
-                <tr>
-                  <td class="px-4 py-2.5">Total Girls (F)</td>
-                  <td class="px-4 py-2.5 text-right font-semibold text-gray-900" id="statGirlsCount">0</td>
-                </tr>
-                <tr id="statOtherGenderWrapper" class="hidden">
-                  <td class="px-4 py-2.5">Other Genders</td>
-                  <td class="px-4 py-2.5 text-right font-semibold text-gray-900" id="statOthersCount">0</td>
-                </tr>
+              <tbody id="statDivisionBody" class="divide-y divide-gray-100 text-gray-700 bg-white">
+                <!-- Dynamically Populated -->
               </tbody>
+              <tfoot id="statDivisionFoot" class="bg-gray-50 font-bold border-t border-gray-300 text-gray-900">
+                <!-- Dynamically Populated Grand Totals -->
+              </tfoot>
             </table>
-          </div>
-
-          <!-- Division wise stats list (Embedded Table) -->
-          <div class="border rounded-lg overflow-hidden">
-            <div class="bg-gray-50 px-4 py-2 border-b text-sm font-semibold text-gray-600">Division-wise Breakdown</div>
-            <div class="overflow-y-auto max-h-48 divide-y divide-gray-100" id="statDivisionBreakdown">
-              <!-- Dynamically Populated -->
-            </div>
           </div>
         </div>
 
-        <!-- Language Breakdown Table with Class wise details (Right Column) -->
-        <div class="lg:col-span-7">
-          <div class="border rounded-lg overflow-hidden h-full flex flex-col">
-            <div class="bg-gray-50 px-4 py-2 border-b text-sm font-semibold text-gray-600">First Language Enrollment & Class-wise Distribution</div>
-            <div class="overflow-y-auto flex-1 divide-y divide-gray-100 text-xs" id="statLanguageBreakdown">
-              <!-- Dynamically Populated -->
-            </div>
+        <!-- Table 2: First Language Enrollment & Class-wise Distribution -->
+        <div class="lg:col-span-7 flex flex-col">
+          <h3 class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">First Language Enrollment & Class-wise Distribution</h3>
+          <div class="overflow-x-auto border rounded-lg max-h-80">
+            <table class="min-w-full divide-y divide-gray-200 text-xs text-left">
+              <thead class="bg-gray-50 sticky top-0 border-b">
+                <tr>
+                  <th class="px-4 py-2 font-semibold text-gray-600">First Language</th>
+                  <th class="px-4 py-2 font-semibold text-gray-600">Class and division</th>
+                  <th class="px-4 py-2 text-center font-semibold text-gray-600">M</th>
+                  <th class="px-4 py-2 text-center font-semibold text-gray-600">F</th>
+                  <th class="px-4 py-2 text-right font-semibold text-gray-600">Total</th>
+                </tr>
+              </thead>
+              <tbody id="statLanguageBody" class="divide-y divide-gray-100 text-gray-700 bg-white">
+                <!-- Dynamically Populated -->
+              </tbody>
+              <tfoot id="statLanguageFoot" class="bg-gray-50 font-bold border-t border-gray-300 text-gray-900">
+                <!-- Dynamically Populated Grand Totals -->
+              </tfoot>
+            </table>
           </div>
         </div>
       </div>
@@ -407,6 +414,16 @@
       return dateStr; // fallback
     }
 
+    // Helper: Show/Hide Global Spinner Overlay
+    function showSpinner(message = "Please wait...") {
+      document.getElementById("spinnerMessage").innerText = message;
+      document.getElementById("globalSpinner").classList.remove("hidden");
+    }
+
+    function hideSpinner() {
+      document.getElementById("globalSpinner").classList.add("hidden");
+    }
+
     // Read students from GAS
     async function fetchDatabase() {
       if (!SCRIPT_URL || SCRIPT_URL.includes("...")) {
@@ -414,6 +431,7 @@
         return;
       }
 
+      showSpinner("Loading school database...");
       setListMessage("Fetching records...");
       try {
         const response = await fetch(SCRIPT_URL, {
@@ -433,10 +451,12 @@
       } catch (err) {
         setListMessage("Failed to load records. Check connection setup.");
         console.error(err);
+      } finally {
+        hideSpinner();
       }
     }
 
-    // Tabular Statistics Panel Populator (Classwise First Language distribution integrated)
+    // Tabular Statistics Panel Populator (Classwise splits integrated)
     function calculateSchoolStatistics() {
       const summarySec = document.getElementById("schoolSummarySection");
       if (!studentsData || studentsData.length === 0) {
@@ -445,100 +465,120 @@
       }
       summarySec.classList.remove("hidden");
 
-      // Grand Totals and standard M / F Gender Demographics
-      const grandTotal = studentsData.length;
-      const boys = studentsData.filter(s => normalizeGender(s["Gender"]) === "M").length;
-      const girls = studentsData.filter(s => normalizeGender(s["Gender"]) === "F").length;
-      const others = grandTotal - (boys + girls);
-
-      document.getElementById("statGrandTotal").innerText = grandTotal;
-      document.getElementById("statBoysCount").innerText = boys;
-      document.getElementById("statGirlsCount").innerText = girls;
-
-      const otherWrapper = document.getElementById("statOtherGenderWrapper");
-      if (others > 0) {
-        otherWrapper.classList.remove("hidden");
-        document.getElementById("statOthersCount").innerText = others;
-      } else {
-        otherWrapper.classList.add("hidden");
-      }
-
-      // Division/Class-wise breakdown Table rendering
+      // --------------------------------------------------
+      // Table 1: Division-wise Breakdown Logic
+      // --------------------------------------------------
       const divMap = {};
+      let totalM = 0;
+      let totalF = 0;
+      let overallTotal = 0;
+
       studentsData.forEach(student => {
         const cls = student["Class and Division"] || "Unknown";
         const gender = normalizeGender(student["Gender"]);
         
         if (!divMap[cls]) {
-          divMap[cls] = { total: 0, boys: 0, girls: 0 };
+          divMap[cls] = { m: 0, f: 0, total: 0 };
         }
         divMap[cls].total++;
-        if (gender === "M") divMap[cls].boys++;
-        else if (gender === "F") divMap[cls].girls++;
+        overallTotal++;
+
+        if (gender === "M") {
+          divMap[cls].m++;
+          totalM++;
+        } else if (gender === "F") {
+          divMap[cls].f++;
+          totalF++;
+        }
       });
 
-      const divListHtml = Object.keys(divMap).sort().map(cls => {
-        const data = divMap[cls];
+      const divBody = document.getElementById("statDivisionBody");
+      const divFoot = document.getElementById("statDivisionFoot");
+
+      // Render Table 1 Body
+      divBody.innerHTML = Object.keys(divMap).sort().map(cls => {
+        const d = divMap[cls];
         return `
-          <div class="flex justify-between items-center px-4 py-2 text-xs hover:bg-gray-50">
-            <span class="font-medium text-gray-700">${cls}</span>
-            <span class="text-gray-500">
-              Total: <strong class="text-gray-900">${data.total}</strong> 
-              (<span class="text-blue-600">M: ${data.boys}</span> | <span class="text-pink-600">F: ${data.girls}</span>)
-            </span>
-          </div>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 font-medium text-gray-900">${cls}</td>
+            <td class="px-4 py-2 text-center text-blue-600 font-semibold">${d.m}</td>
+            <td class="px-4 py-2 text-center text-pink-600 font-semibold">${d.f}</td>
+            <td class="px-4 py-2 text-right font-bold text-gray-900">${d.total}</td>
+          </tr>
         `;
       }).join('');
-      document.getElementById("statDivisionBreakdown").innerHTML = divListHtml || '<div class="px-4 py-3 text-gray-400">No data</div>';
 
-      // First Language class-wise splits computation
-      const langMap = {};
+      // Render Table 1 Footer (Grand total row)
+      divFoot.innerHTML = `
+        <tr>
+          <td class="px-4 py-2 text-left uppercase tracking-wider">Grand total</td>
+          <td class="px-4 py-2 text-center text-blue-800 font-extrabold">${totalM}</td>
+          <td class="px-4 py-2 text-center text-pink-800 font-extrabold">${totalF}</td>
+          <td class="px-4 py-2 text-right text-gray-900 font-extrabold">${overallTotal}</td>
+        </tr>
+      `;
+
+      // --------------------------------------------------
+      // Table 2: First Language Enrollment & Class-wise Distribution
+      // --------------------------------------------------
+      const langClassMap = {};
+      let grandLangM = 0;
+      let grandLangF = 0;
+      let grandLangTotal = 0;
+
       studentsData.forEach(student => {
         const lang = student["First Language"] || "Not Specified";
         const cls = student["Class and Division"] || "Unknown";
         const gender = normalizeGender(student["Gender"]);
+        const key = `${lang}||${cls}`;
 
-        if (!langMap[lang]) {
-          langMap[lang] = { total: 0, boys: 0, girls: 0, classes: {} };
+        if (!langClassMap[key]) {
+          langClassMap[key] = { lang, cls, m: 0, f: 0, total: 0 };
         }
-        langMap[lang].total++;
-        if (gender === "M") langMap[lang].boys++;
-        else if (gender === "F") langMap[lang].girls++;
 
-        if (!langMap[lang].classes[cls]) {
-          langMap[lang].classes[cls] = { total: 0, boys: 0, girls: 0 };
+        langClassMap[key].total++;
+        grandLangTotal++;
+        if (gender === "M") {
+          langClassMap[key].m++;
+          grandLangM++;
+        } else if (gender === "F") {
+          langClassMap[key].f++;
+          grandLangF++;
         }
-        langMap[lang].classes[cls].total++;
-        if (gender === "M") langMap[lang].classes[cls].boys++;
-        else if (gender === "F") langMap[lang].classes[cls].girls++;
       });
 
-      const langListHtml = Object.keys(langMap).sort().map(lang => {
-        const data = langMap[lang];
-        
-        // Form the inline class breakdown tags/texts
-        const classSplits = Object.keys(data.classes).sort().map(c => {
-          const cData = data.classes[c];
-          return `<span class="inline-block bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-[10px] mr-1 mb-1">
-            ${c}: <strong>${cData.total}</strong> (M:${cData.boys}/F:${cData.girls})
-          </span>`;
-        }).join('');
+      // Sort Language elements first by name, then by Class/Div
+      const sortedLangRows = Object.values(langClassMap).sort((a, b) => {
+        const langCompare = a.lang.localeCompare(b.lang);
+        if (langCompare !== 0) return langCompare;
+        return a.cls.localeCompare(b.cls);
+      });
 
+      const langBody = document.getElementById("statLanguageBody");
+      const langFoot = document.getElementById("statLanguageFoot");
+
+      // Render Table 2 Body
+      langBody.innerHTML = sortedLangRows.map(row => {
         return `
-          <div class="p-3 hover:bg-gray-50 space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="font-semibold text-sm text-emerald-800">${lang}</span>
-              <span class="text-gray-600 text-xs font-semibold">
-                Total: ${data.total} (M:${data.boys} | F:${data.girls})
-              </span>
-            </div>
-            <div class="flex flex-wrap items-center">
-              ${classSplits || '<span class="text-gray-400">-</span>'}
-            </div>
-          </div>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 font-semibold text-emerald-800">${row.lang}</td>
+            <td class="px-4 py-2 font-medium text-gray-700">${row.cls}</td>
+            <td class="px-4 py-2 text-center text-blue-600 font-semibold">${row.m}</td>
+            <td class="px-4 py-2 text-center text-pink-600 font-semibold">${row.f}</td>
+            <td class="px-4 py-2 text-right font-bold text-gray-900">${row.total}</td>
+          </tr>
         `;
       }).join('');
-      document.getElementById("statLanguageBreakdown").innerHTML = langListHtml || '<div class="p-4 text-gray-400">No data</div>';
+
+      // Render Table 2 Footer (Grand total row)
+      langFoot.innerHTML = `
+        <tr>
+          <td class="px-4 py-2 text-left uppercase tracking-wider" colspan="2">Grand total</td>
+          <td class="px-4 py-2 text-center text-blue-800 font-extrabold">${grandLangM}</td>
+          <td class="px-4 py-2 text-center text-pink-800 font-extrabold">${grandLangF}</td>
+          <td class="px-4 py-2 text-right text-gray-900 font-extrabold">${grandLangTotal}</td>
+        </tr>
+      `;
     }
 
     function setListMessage(message) {
@@ -887,8 +927,8 @@
       report += `\n==============================\n`;
       report += `*SUMMARY STATISTICS*\n`;
       report += `• *Grand Total:* ${filtered.length}\n`;
-      report += `• *M (Male):* ${totalM}\n`;
-      report += `• *F (Female):* ${totalF}\n\n`;
+      report += `• *M:* ${totalM}\n`;
+      report += `• *F:* ${totalF}\n\n`;
 
       // 3. First Language Breakdown
       report += `*FIRST LANGUAGE DISTRIBUTION*\n`;
@@ -1084,50 +1124,46 @@
         return;
       }
 
-      const saveButton = document.getElementById("btnSubmitForm");
-      const originalText = saveButton.innerText;
-      saveButton.innerText = "Processing...";
-      saveButton.disabled = true;
-
-      // Run image upload pipeline if a new photo exists
-      let finalImgUrl = document.getElementById("formImgUrl").value || "";
-      if (activeImageBlob) {
-        const uploadedImgUrl = await uploadActivePhoto();
-        if (uploadedImgUrl) {
-          finalImgUrl = uploadedImgUrl;
-        } else {
-          saveButton.innerText = originalText;
-          saveButton.disabled = false;
-          return;
-        }
-      }
-
-      const payloadData = {
-        "Class and Division": document.getElementById("f_class").value,
-        "Admission Number": document.getElementById("f_adm").value,
-        "Name": document.getElementById("f_name").value,
-        "Gender": document.getElementById("f_gender").value,
-        "DOB": document.getElementById("f_dob").value,
-        "Father": document.getElementById("f_father").value,
-        "Mother": document.getElementById("f_mother").value,
-        "Mobile": document.getElementById("f_mobile").value,
-        "House": document.getElementById("f_house").value,
-        "Post Office": document.getElementById("f_po").value,
-        "Pin": document.getElementById("f_pin").value,
-        "Medium": document.getElementById("f_medium").value,
-        "Religion": document.getElementById("f_religion").value,
-        "Caste": document.getElementById("f_caste").value,
-        "Category": document.getElementById("f_category").value,
-        "First Language": document.getElementById("f_lang").value,
-        "IMG URL": finalImgUrl
-      };
-
-      const payload = {
-        action: (mode === 'add') ? 'create' : 'update',
-        data: payloadData
-      };
+      showSpinner("Processing request...");
 
       try {
+        let finalImgUrl = document.getElementById("formImgUrl").value || "";
+        if (activeImageBlob) {
+          showSpinner("Uploading student image to ImgBB...");
+          const uploadedImgUrl = await uploadActivePhoto();
+          if (uploadedImgUrl) {
+            finalImgUrl = uploadedImgUrl;
+          } else {
+            return;
+          }
+        }
+
+        showSpinner("Saving changes to database...");
+        const payloadData = {
+          "Class and Division": document.getElementById("f_class").value,
+          "Admission Number": document.getElementById("f_adm").value,
+          "Name": document.getElementById("f_name").value,
+          "Gender": document.getElementById("f_gender").value,
+          "DOB": document.getElementById("f_dob").value,
+          "Father": document.getElementById("f_father").value,
+          "Mother": document.getElementById("f_mother").value,
+          "Mobile": document.getElementById("f_mobile").value,
+          "House": document.getElementById("f_house").value,
+          "Post Office": document.getElementById("f_po").value,
+          "Pin": document.getElementById("f_pin").value,
+          "Medium": document.getElementById("f_medium").value,
+          "Religion": document.getElementById("f_religion").value,
+          "Caste": document.getElementById("f_caste").value,
+          "Category": document.getElementById("f_category").value,
+          "First Language": document.getElementById("f_lang").value,
+          "IMG URL": finalImgUrl
+        };
+
+        const payload = {
+          action: (mode === 'add') ? 'create' : 'update',
+          data: payloadData
+        };
+
         const response = await fetch(SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify(payload)
@@ -1145,8 +1181,7 @@
         alert("Failed to communicate with the sheet. Check setup.");
         console.error(err);
       } finally {
-        saveButton.innerText = originalText;
-        saveButton.disabled = false;
+        hideSpinner();
       }
     }
 
@@ -1155,6 +1190,7 @@
       if (!currentSelectedStudent) return;
       if (!confirm(`Are you sure you want to permanently delete records of ${currentSelectedStudent["Name"]}?`)) return;
 
+      showSpinner("Deleting student record...");
       const payload = {
         action: 'delete',
         data: { "Admission Number": currentSelectedStudent["Admission Number"] }
@@ -1179,6 +1215,8 @@
       } catch (err) {
         alert("Operation failed. Validate web app integration configurations.");
         console.error(err);
+      } finally {
+        hideSpinner();
       }
     }
   </script>
