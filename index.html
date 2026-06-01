@@ -54,312 +54,297 @@
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
 
-  <!-- Global Loading Spinner Overlay -->
-  <div id="globalSpinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center space-y-4">
+  <!-- Global Loading Spinner Overlay (Always active during sync/save/busy) -->
+  <div id="globalSpinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center space-y-4">
     <!-- Tailwind SVG Spinner -->
     <svg class="animate-spin h-14 w-14 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
     </svg>
-    <p id="spinnerMessage" class="text-white text-sm font-semibold tracking-wide">Please wait...</p>
+    <p id="spinnerMessage" class="text-white text-sm font-semibold tracking-wide">Initializing system registry...</p>
   </div>
 
   <div class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
     <!-- Header -->
-    <header class="flex flex-col md:flex-row justify-between items-center bg-white shadow-sm rounded-lg p-6 gap-4">
+    <header class="flex flex-col md:flex-row justify-between items-center bg-white shadow-sm rounded-lg p-6 gap-4 border border-gray-200">
       <div>
         <h1 class="text-2xl font-semibold text-gray-900">Student Database</h1>
-        <p class="text-sm text-gray-500">Manage records, uploads, and modifications.</p>
+        <p class="text-sm text-gray-500">Manage records, uploads, and teacher assignments.</p>
       </div>
       <div class="flex flex-wrap gap-2 w-full md:w-auto">
-        <button id="btnAddNew" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md text-sm transition w-full md:w-auto" onclick="showFormForAdd()">
+        <button onclick="fetchDatabase()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-md text-sm transition border flex items-center gap-1.5 w-full md:w-auto justify-center">
+          🔄 Sync Data
+        </button>
+        <button id="btnAddNew" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md text-sm transition w-full md:w-auto" onclick="showFormForAdd(); switchTab(2)">
           + Add New Student
         </button>
       </div>
     </header>
 
-    <!-- Unified School Statistics Table Summary -->
-    <section id="schoolSummarySection" class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hidden space-y-6">
-      <h2 class="text-base font-semibold text-gray-900 border-b pb-2 flex items-center gap-2">
-        <span>📊 School Statistics Summary</span>
-      </h2>
-      
+    <!-- Modern Icon-Only Tab Bar Navigation -->
+    <nav class="flex justify-center border border-gray-200 bg-white rounded-lg shadow-sm p-1.5 gap-1">
+      <button onclick="switchTab(1)" id="tabBtn-1" title="School Statistics Summary" class="flex-1 py-3 text-xl md:text-2xl text-center rounded-lg transition-all focus:outline-none bg-blue-500 text-white font-bold">📊</button>
+      <button onclick="switchTab(2)" id="tabBtn-2" title="Search & Modify Records" class="flex-1 py-3 text-xl md:text-2xl text-center rounded-lg transition-all focus:outline-none text-gray-500 hover:bg-gray-100">🔍</button>
+      <button onclick="switchTab(3)" id="tabBtn-3" title="Class Directory Utilities" class="flex-1 py-3 text-xl md:text-2xl text-center rounded-lg transition-all focus:outline-none text-gray-500 hover:bg-gray-100">📋</button>
+      <button onclick="switchTab(4)" id="tabBtn-4" title="Quick Photo Uploader" class="flex-1 py-3 text-xl md:text-2xl text-center rounded-lg transition-all focus:outline-none text-gray-500 hover:bg-gray-100">📸</button>
+      <button onclick="switchTab(5)" id="tabBtn-5" title="Teacher Configurations" class="flex-1 py-3 text-xl md:text-2xl text-center rounded-lg transition-all focus:outline-none text-gray-500 hover:bg-gray-100">⚙️</button>
+    </nav>
+
+    <!-- TAB 1 CONTENT: School Statistics Summary Tables -->
+    <div id="tabContent-1" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- Table 1: Division-wise Breakdown -->
         <div class="lg:col-span-5 flex flex-col">
-          <h3 class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Division-wise Breakdown</h3>
-          <div class="overflow-x-auto border rounded-lg max-h-80">
-            <table class="min-w-full divide-y divide-gray-200 text-xs">
-              <thead class="bg-gray-50 sticky top-0 border-b">
+          <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Division-wise Breakdown</h3>
+          <div class="overflow-x-auto">
+            <table class="min-w-full border-collapse border border-gray-300 text-xs text-left">
+              <thead class="bg-gray-100">
                 <tr>
-                  <th class="px-4 py-2 text-left font-semibold text-gray-600">Class and division</th>
-                  <th class="px-4 py-2 text-center font-semibold text-gray-600">M</th>
-                  <th class="px-4 py-2 text-center font-semibold text-gray-600">F</th>
-                  <th class="px-4 py-2 text-right font-semibold text-gray-600">Total</th>
+                  <th class="border border-gray-300 px-3 py-2 text-left font-semibold text-gray-700">Class and division</th>
+                  <th class="border border-gray-300 px-3 py-2 text-center font-semibold text-gray-700">M</th>
+                  <th class="border border-gray-300 px-3 py-2 text-center font-semibold text-gray-700">F</th>
+                  <th class="border border-gray-300 px-3 py-2 text-right font-semibold text-gray-700">Total</th>
                 </tr>
               </thead>
-              <tbody id="statDivisionBody" class="divide-y divide-gray-100 text-gray-700 bg-white">
-                <!-- Dynamically Populated -->
+              <tbody id="statDivisionBody" class="text-gray-700 bg-white">
+                <tr>
+                  <td colspan="4" class="text-center py-4 text-gray-400">Syncing registry data...</td>
+                </tr>
               </tbody>
-              <tfoot id="statDivisionFoot" class="bg-gray-50 font-bold border-t border-gray-300 text-gray-900">
-                <!-- Dynamically Populated Grand Totals -->
+              <tfoot id="statDivisionFoot" class="bg-gray-100 font-bold text-gray-900">
+                <!-- M, F, and Grand Totals -->
               </tfoot>
             </table>
           </div>
         </div>
 
-        <!-- Table 2: First Language Enrollment & Class-wise Distribution -->
+        <!-- Table 2: First Language Enrollment Table -->
         <div class="lg:col-span-7 flex flex-col">
-          <h3 class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">First Language Enrollment & Class-wise Distribution</h3>
-          <div class="overflow-x-auto border rounded-lg max-h-80">
-            <table class="min-w-full divide-y divide-gray-200 text-xs text-left">
-              <thead class="bg-gray-50 sticky top-0 border-b">
+          <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">First Language Statistics (ARABIC, MAL, SKT)</h3>
+          <div class="overflow-x-auto">
+            <table class="min-w-full border-collapse border border-gray-300 text-xs text-left">
+              <thead class="bg-gray-100">
                 <tr>
-                  <th class="px-4 py-2 font-semibold text-gray-600">First Language</th>
-                  <th class="px-4 py-2 font-semibold text-gray-600">Class and division</th>
-                  <th class="px-4 py-2 text-center font-semibold text-gray-600">M</th>
-                  <th class="px-4 py-2 text-center font-semibold text-gray-600">F</th>
-                  <th class="px-4 py-2 text-right font-semibold text-gray-600">Total</th>
+                  <th class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">First Language</th>
+                  <th class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">Class and division</th>
+                  <th class="border border-gray-300 px-3 py-2 text-center font-semibold text-gray-700">M</th>
+                  <th class="border border-gray-300 px-3 py-2 text-center font-semibold text-gray-700">F</th>
+                  <th class="border border-gray-300 px-3 py-2 text-right font-semibold text-gray-700">Total</th>
                 </tr>
               </thead>
-              <tbody id="statLanguageBody" class="divide-y divide-gray-100 text-gray-700 bg-white">
-                <!-- Dynamically Populated -->
+              <tbody id="statLanguageBody" class="text-gray-700 bg-white">
+                <tr>
+                  <td colspan="5" class="text-center py-4 text-gray-400">Syncing registry data...</td>
+                </tr>
               </tbody>
-              <tfoot id="statLanguageFoot" class="bg-gray-50 font-bold border-t border-gray-300 text-gray-900">
-                <!-- Dynamically Populated Grand Totals -->
+              <tfoot id="statLanguageFoot" class="bg-gray-100 font-bold text-gray-900">
+                <!-- M, F, and Grand Totals -->
               </tfoot>
             </table>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Main Workspace -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      <!-- Left Panel: Search & List -->
-      <div class="lg:col-span-5 bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col h-[650px]">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Search Directory</label>
-          <input type="text" id="searchInput" oninput="filterStudents()" placeholder="Search by name or admission no..." class="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        
-        <div class="overflow-y-auto flex-1 border-t border-gray-100" id="studentListContainer">
-          <!-- Live items load here dynamically -->
-          <div class="text-center py-8 text-gray-400 text-sm">Loading database records...</div>
-        </div>
-      </div>
-
-      <!-- Right Panel: View / Edit / Create Forms -->
-      <div class="lg:col-span-7 bg-white p-4 md:p-6 rounded-lg shadow-sm border border-gray-100 min-h-[650px]">
-        
-        <!-- Welcome Screen -->
-        <div id="viewPlaceholder" class="flex flex-col items-center justify-center h-full text-center py-20">
-          <span class="text-4xl">📁</span>
-          <h3 class="mt-4 text-lg font-medium text-gray-900">No Student Selected</h3>
-          <p class="text-gray-500 text-sm max-w-xs mt-1">Select a student from the list or add a new record to get started.</p>
-        </div>
-
-        <!-- Detail/Form View (Hidden by default) -->
-        <div id="formContainer" class="hidden">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6 gap-2">
-            <h2 id="panelTitle" class="text-xl font-semibold text-gray-900">Student Record</h2>
-            <div class="flex gap-2 w-full sm:w-auto">
-              <button id="btnEditMode" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-3 py-1.5 rounded text-sm transition flex-1 sm:flex-none" onclick="enableEditMode()">Edit</button>
-              <button id="btnDelete" class="bg-red-50 hover:bg-red-100 text-red-600 font-medium px-3 py-1.5 rounded text-sm transition flex-1 sm:flex-none" onclick="deleteRecord()">Remove</button>
-            </div>
-          </div>
-
-          <!-- Dynamic Form -->
-          <form id="studentForm" onsubmit="handleSubmit(event)" class="space-y-4">
-            
-            <!-- Picture Row with Camera Integration -->
-            <div class="flex flex-col sm:flex-row items-center gap-4 bg-gray-50 p-4 rounded-lg mb-4">
-              <div class="w-24 h-24 bg-gray-200 rounded-md overflow-hidden border border-gray-300 flex items-center justify-center flex-shrink-0">
-                <img id="formImgPreview" src="https://placehold.co/150" alt="Student Preview" class="object-cover w-full h-full">
-              </div>
-              <div class="flex-1 w-full space-y-2">
-                <label class="block text-xs font-semibold text-gray-600 uppercase">Student Photo</label>
-                <div class="flex flex-col sm:flex-row gap-2">
-                  <input type="file" id="formImgInput" accept="image/*" onchange="handleFileSelect(event)" class="text-sm file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full border rounded p-1 bg-white">
-                  <button type="button" id="btnCameraOpen" onclick="openCameraModal('main')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded text-xs transition flex-shrink-0 flex items-center justify-center gap-1">
-                    📸 Camera
-                  </button>
-                </div>
-                <input type="hidden" id="formImgUrl">
-              </div>
-            </div>
-
-            <!-- Fields Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Admission Number</label>
-                <input type="text" id="f_adm" required class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Name</label>
-                <input type="text" id="f_name" required class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Class and Division</label>
-                <input type="text" id="f_class" required placeholder="e.g. 10-A" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Gender</label>
-                <select id="f_gender" required class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-                  <option value="">Select</option>
-                  <option value="M">M</option>
-                  <option value="F">F</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">DOB (dd/mm/yyyy)</label>
-                <input type="text" id="f_dob" required placeholder="DD/MM/YYYY" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Mobile</label>
-                <input type="tel" id="f_mobile" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Father's Name</label>
-                <input type="text" id="f_father" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Mother's Name</label>
-                <input type="text" id="f_mother" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">House</label>
-                <input type="text" id="f_house" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Post Office</label>
-                <input type="text" id="f_po" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">PIN</label>
-                <input type="text" id="f_pin" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Medium</label>
-                <input type="text" id="f_medium" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Religion</label>
-                <input type="text" id="f_religion" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Caste</label>
-                <input type="text" id="f_caste" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Category</label>
-                <input type="text" id="f_category" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">First Language</label>
-                <input type="text" id="f_lang" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-blue-500 disabled:bg-gray-100">
-              </div>
-            </div>
-
-            <div id="formActions" class="flex gap-2 justify-end pt-4 border-t mt-4">
-              <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2 rounded text-sm transition" onclick="resetToView()">Cancel</button>
-              <button type="submit" id="btnSubmitForm" class="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded text-sm transition">Save Changes</button>
-            </div>
-          </form>
-        </div>
-
       </div>
     </div>
 
-    <!-- Class-wise Directory, Print and WhatsApp broadcasting -->
-    <section class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-      <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center border-b pb-4 mb-4 gap-4">
-        <div>
-          <h2 class="text-xl font-semibold text-gray-900">Class Directory Utilities</h2>
-          <p class="text-xs text-gray-500">Generate class tables, export Landscape A4 rosters, or dispatch rosters to teachers.</p>
+    <!-- TAB 2 CONTENT: Search Directory & Form Editor -->
+    <div id="tabContent-2" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Live search queries matches (Only renders when typing) -->
+        <div class="lg:col-span-5 flex flex-col h-[650px] border-r border-gray-100 pr-0 lg:pr-6">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Search Student Name or Adm No</label>
+            <input type="text" id="searchInput" oninput="handleTypingSearch()" placeholder="Type to fetch students..." class="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+          </div>
+          <div class="overflow-y-auto flex-1 border border-dashed rounded-md bg-gray-50 p-2 space-y-1" id="studentListContainer">
+            <div class="text-center py-12 text-gray-400 text-xs">Begin typing to fetch matches...</div>
+          </div>
         </div>
-        <div class="flex flex-wrap gap-2 w-full xl:w-auto">
-          <select id="classDivSelector" onchange="generateClassReportTable()" class="text-sm border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
+
+        <!-- Form Edit Panel -->
+        <div class="lg:col-span-7 min-h-[650px]">
+          <div id="viewPlaceholder" class="flex flex-col items-center justify-center h-full text-center py-20">
+            <span class="text-3xl">📇</span>
+            <h3 class="mt-4 text-sm font-medium text-gray-900">Roster Record Workspace</h3>
+            <p class="text-gray-400 text-xs mt-1">Select a student search match to read, edit, or remove.</p>
+          </div>
+
+          <div id="formContainer" class="hidden">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+              <h3 id="panelTitle" class="font-bold text-gray-800 text-base">Student Details</h3>
+              <div class="flex gap-2">
+                <button id="btnEditMode" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-3 py-1 rounded text-xs transition" onclick="enableEditMode()">Edit</button>
+                <button id="btnDelete" class="bg-red-50 hover:bg-red-100 text-red-600 font-medium px-3 py-1 rounded text-xs transition" onclick="deleteRecord()">Remove</button>
+              </div>
+            </div>
+
+            <form id="studentForm" onsubmit="handleSubmit(event)" class="space-y-4">
+              <div class="flex flex-col sm:flex-row items-center gap-4 bg-gray-50 p-4 rounded-lg mb-4">
+                <div class="w-24 h-24 bg-gray-200 rounded-md overflow-hidden border border-gray-300 flex items-center justify-center flex-shrink-0">
+                  <img id="formImgPreview" src="https://placehold.co/150" alt="Student Preview" class="object-cover w-full h-full">
+                </div>
+                <div class="flex-1 w-full space-y-2">
+                  <label class="block text-xs font-semibold text-gray-600 uppercase">Student Photo</label>
+                  <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="file" id="formImgInput" accept="image/*" onchange="handleFileSelect(event)" class="text-sm file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full border rounded p-1 bg-white">
+                    <button type="button" id="btnCameraOpen" onclick="openCameraModal('main')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded text-xs transition flex-shrink-0">📸 Camera</button>
+                  </div>
+                  <input type="hidden" id="formImgUrl">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Admission Number</label>
+                  <input type="text" id="f_adm" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Name</label>
+                  <input type="text" id="f_name" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Class and Division</label>
+                  <input type="text" id="f_class" required placeholder="e.g. 10-A" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Gender</label>
+                  <select id="f_gender" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                    <option value="">Select</option>
+                    <option value="M">M</option>
+                    <option value="F">F</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">DOB (dd/mm/yyyy)</label>
+                  <input type="text" id="f_dob" required placeholder="DD/MM/YYYY" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Mobile</label>
+                  <input type="tel" id="f_mobile" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Father's Name</label>
+                  <input type="text" id="f_father" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Mother's Name</label>
+                  <input type="text" id="f_mother" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">House</label>
+                  <input type="text" id="f_house" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Post Office</label>
+                  <input type="text" id="f_po" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">PIN</label>
+                  <input type="text" id="f_pin" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Medium</label>
+                  <input type="text" id="f_medium" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Religion</label>
+                  <input type="text" id="f_religion" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Caste</label>
+                  <input type="text" id="f_caste" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Category</label>
+                  <input type="text" id="f_category" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">First Language</label>
+                  <input type="text" id="f_lang" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+              </div>
+
+              <div id="formActions" class="flex gap-2 justify-end pt-3 border-t mt-4 hidden">
+                <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-3 py-1.5 rounded text-xs transition" onclick="resetToView()">Cancel</button>
+                <button type="submit" id="btnSubmitForm" class="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1.5 rounded text-xs transition">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3 CONTENT: Class Directory Utilities -->
+    <div id="tabContent-3" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hidden space-y-4">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-2 border-b gap-4">
+        <div>
+          <h3 class="font-bold text-gray-800 text-sm">Roster Exporters</h3>
+          <p class="text-xs text-gray-500">Run rosters to printouts or dispatch them to designated Class Teachers.</p>
+        </div>
+        <div class="flex flex-wrap gap-2 w-full md:w-auto">
+          <select id="classDivSelector" onchange="generateClassReportTable()" class="text-xs border border-gray-300 rounded px-2.5 py-1.5 bg-white">
             <option value="">Select Class & Division</option>
           </select>
-          <button onclick="shareClassToTeacher()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded text-sm transition flex items-center gap-1">
+          <button onclick="shareClassToTeacher()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1.5 rounded text-xs transition flex items-center gap-1">
             💬 WhatsApp Class to Teacher
           </button>
-          <button onclick="printClassReport()" class="bg-gray-800 hover:bg-gray-900 text-white font-medium px-4 py-2 rounded text-sm transition flex items-center gap-1">
+          <button onclick="printClassReport()" class="bg-gray-800 hover:bg-gray-900 text-white font-medium px-3 py-1.5 rounded text-xs transition flex items-center gap-1">
             🖨️ Print Class List (Landscape A4)
           </button>
         </div>
       </div>
 
-      <!-- Scrollable Database Table -->
-      <div class="overflow-x-auto border rounded-lg max-h-96">
-        <table class="min-w-full text-xs text-left" id="classReportTable">
-          <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider sticky top-0 border-b">
+      <div class="overflow-x-auto border border-gray-200 rounded-lg max-h-96">
+        <table class="min-w-full text-[11px] text-left border-collapse border border-gray-300" id="classReportTable">
+          <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider sticky top-0">
             <tr>
-              <th class="px-4 py-3">Sl No</th>
-              <th class="px-4 py-3">Photo</th>
-              <th class="px-4 py-3">Adm No</th>
-              <th class="px-4 py-3">Name</th>
-              <th class="px-4 py-3">Class & Div</th>
-              <th class="px-4 py-3">Gender</th>
-              <th class="px-4 py-3">DOB</th>
-              <th class="px-4 py-3">Father</th>
-              <th class="px-4 py-3">Mother</th>
-              <th class="px-4 py-3">Mobile</th>
-              <th class="px-4 py-3">House</th>
-              <th class="px-4 py-3">Post Office</th>
-              <th class="px-4 py-3">PIN</th>
-              <th class="px-4 py-3">Medium</th>
-              <th class="px-4 py-3">Religion</th>
-              <th class="px-4 py-3">Caste</th>
-              <th class="px-4 py-3">Category</th>
-              <th class="px-4 py-3">Language</th>
-              <th class="px-4 py-3 text-center">Actions</th>
+              <th class="border border-gray-300 px-3 py-2">Sl No</th>
+              <th class="border border-gray-300 px-3 py-2">Photo</th>
+              <th class="border border-gray-300 px-3 py-2">Adm No</th>
+              <th class="border border-gray-300 px-3 py-2">Name</th>
+              <th class="border border-gray-300 px-3 py-2">Class & Div</th>
+              <th class="border border-gray-300 px-3 py-2">Gender</th>
+              <th class="border border-gray-300 px-3 py-2">DOB</th>
+              <th class="border border-gray-300 px-3 py-2">Father</th>
+              <th class="border border-gray-300 px-3 py-2">Mother</th>
+              <th class="border border-gray-300 px-3 py-2">Mobile</th>
+              <th class="border border-gray-300 px-3 py-2">House</th>
+              <th class="border border-gray-300 px-3 py-2">Post Office</th>
+              <th class="border border-gray-300 px-3 py-2">PIN</th>
+              <th class="border border-gray-300 px-3 py-2">Medium</th>
+              <th class="border border-gray-300 px-3 py-2">Religion</th>
+              <th class="border border-gray-300 px-3 py-2">Caste</th>
+              <th class="border border-gray-300 px-3 py-2">Category</th>
+              <th class="border border-gray-300 px-3 py-2">Language</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200" id="classReportBody">
+          <tbody class="divide-y divide-gray-200 bg-white" id="classReportBody">
             <tr>
-              <td colspan="19" class="text-center py-8 text-gray-400">Select a Class & Division to load data...</td>
+              <td colspan="19" class="text-center py-6 text-gray-400">Select a Class & Division to load roster...</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </section>
+    </div>
 
-    <!-- NEW SECTION: Quick Photo Uploader -->
-    <section class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-      <div class="border-b pb-4 mb-4">
-        <h2 class="text-xl font-semibold text-gray-900">Quick Photo Uploader</h2>
-        <p class="text-xs text-gray-500">Search for a student to instantly update their photograph using files or a direct camera feed.</p>
-      </div>
-
+    <!-- TAB 4 CONTENT: Quick Photo Uploader -->
+    <div id="tabContent-4" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hidden">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Search and Selection area -->
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Search Student Name or Adm No</label>
-            <input type="text" id="quickSearchInput" oninput="handleQuickSearch()" placeholder="Type to search..." class="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Search Student Name or Adm No</label>
+            <input type="text" id="quickSearchInput" oninput="handleQuickSearch()" placeholder="Type to search..." class="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
           </div>
-
-          <!-- Dynamic search matches -->
-          <div id="quickSearchResults" class="border rounded-md divide-y divide-gray-100 max-h-40 overflow-y-auto hidden bg-white shadow-inner">
-            <!-- Matches populate here -->
-          </div>
-
-          <!-- Selected Student Info Card -->
-          <div id="quickConfirmBox" class="p-4 bg-gray-50 border rounded-lg hidden space-y-2">
-            <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400">Target Student Selected</h4>
-            <div class="text-sm space-y-1 text-gray-700">
-              <p>Name: <strong id="quick_name" class="text-gray-900">-</strong></p>
-              <p>Admission No: <strong id="quick_adm" class="text-gray-900">-</strong></p>
-              <p>Class & Division: <strong id="quick_class" class="text-gray-900">-</strong></p>
-            </div>
+          <div id="quickSearchResults" class="border rounded-md divide-y divide-gray-100 max-h-40 overflow-y-auto hidden bg-white shadow-inner"></div>
+          <div id="quickConfirmBox" class="p-4 bg-gray-50 border rounded-lg hidden space-y-1 text-xs">
+            <h4 class="font-bold text-gray-600 uppercase tracking-wider mb-1">Target Student Profile</h4>
+            <p>Name: <strong id="quick_name" class="text-gray-950">-</strong></p>
+            <p>Admission No: <strong id="quick_adm" class="text-gray-950">-</strong></p>
+            <p>Class & Division: <strong id="quick_class" class="text-gray-950">-</strong></p>
           </div>
         </div>
 
-        <!-- Photo controls section (Hidden till selection is active) -->
         <div id="quickUploadControls" class="space-y-4 hidden flex flex-col justify-between">
           <div class="flex flex-col sm:flex-row items-center gap-4 bg-gray-50 p-4 rounded-lg">
             <div class="w-24 h-24 bg-gray-200 rounded-md overflow-hidden border border-gray-300 flex items-center justify-center flex-shrink-0">
@@ -368,25 +353,63 @@
             <div class="flex-1 w-full space-y-2">
               <label class="block text-xs font-semibold text-gray-600 uppercase">Select New Photo</label>
               <div class="flex flex-col sm:flex-row gap-2">
-                <input type="file" id="quickImgInput" accept="image/*" onchange="handleQuickFileSelect(event)" class="text-sm file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full border rounded p-1 bg-white">
-                <button type="button" onclick="openCameraModal('quick')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded text-xs transition flex-shrink-0 flex items-center justify-center gap-1">
-                  📸 Camera
-                </button>
+                <input type="file" id="quickImgInput" accept="image/*" onchange="handleQuickFileSelect(event)" class="text-xs file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full border rounded p-1 bg-white">
+                <button type="button" onclick="openCameraModal('quick')" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1.5 rounded text-xs transition flex-shrink-0">📸 Camera</button>
               </div>
             </div>
           </div>
-
-          <div class="flex justify-end pt-4 border-t">
-            <button type="button" onclick="submitQuickPhoto()" class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded text-sm transition">
-              Confirm and Update Photo
-            </button>
+          <div class="flex justify-end pt-3 border-t">
+            <button type="button" onclick="submitQuickPhoto()" class="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded text-xs transition">Confirm and Update Photo</button>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- TAB 5 CONTENT: Teacher Configuration Management -->
+    <div id="tabContent-5" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form id="teacherConfigForm" onsubmit="handleSaveTeacher(event)" class="space-y-4">
+          <h3 class="font-bold text-gray-800 text-sm">Assign Class Teacher</h3>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Class and Division</label>
+            <input type="text" id="t_class" required placeholder="e.g. 10-A" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 bg-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Teacher Name</label>
+            <input type="text" id="t_name" required placeholder="Name of Teacher" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 bg-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Mobile Number (with country code)</label>
+            <input type="tel" id="t_mobile" required placeholder="e.g. 919876543210" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 bg-white">
+          </div>
+          <div class="flex justify-end pt-3">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded text-xs transition">Save Teacher Config</button>
+          </div>
+        </form>
+
+        <div class="flex flex-col">
+          <h3 class="font-bold text-gray-600 text-xs uppercase tracking-wider mb-2">Assigned Class Teachers</h3>
+          <div class="border rounded-lg overflow-hidden flex-1 overflow-y-auto max-h-72">
+            <table class="min-w-full border-collapse border border-gray-300 text-xs text-left">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">Class & Div</th>
+                  <th class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">Teacher</th>
+                  <th class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">Mobile</th>
+                </tr>
+              </thead>
+              <tbody id="teacherRecordsBody" class="text-gray-700">
+                <tr>
+                  <td colspan="3" class="text-center py-4 text-gray-400">No teacher assignments found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Pure Print Wrapper Container (Targeted by CSS Page Breaks) -->
   <div id="printArea" class="hidden"></div>
 
   <!-- Camera Dialog Backdrop (Modal) -->
@@ -419,28 +442,40 @@
     // ----------------------------------------------------
     // CONFIGURATION CONSTANTS (Hardcoded Integrations)
     // ----------------------------------------------------
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9hwtH6VHL_ipcGyDmfVvMCkE4HO6Aup9jlBYn3aji2IM1AacQTGinf6p9KyX0-WSOEQ/exec"; // Paste your GAS URL here
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxTGtS7YrgFSJv74t7uY3drSDX20VyqUdvuzAlI8KIVTtVGDwVxKzuxXwDugoav3IPg/exec"; // Paste your GAS URL here
     const IMGBB_API_KEY = "377ebb71d00fd6c667642f324e0e557c";                      // Paste your ImgBB Key here
     // ----------------------------------------------------
 
     let studentsData = [];
+    let teachersData = [];
     let currentSelectedStudent = null;
     let mode = 'view'; // view, edit, add
 
     // Image container object for dynamic camera uploads
     let activeImageBlob = null; 
-    let quickUploadBlob = null; // Separate blob for the Quick Upload flow
-    let quickSelectedStudent = null; // Selected student for Quick Photo flow
+    let quickUploadBlob = null; 
+    let quickSelectedStudent = null; 
 
     // Camera context configurations
     let videoStream = null;
-    let preferredCameraFacing = "user"; // "user" (front), "environment" (rear)
-    let cameraContextTarget = "main"; // Tracks source element: "main" (form input) or "quick" (quick uploader)
+    let preferredCameraFacing = "user"; 
+    let cameraContextTarget = "main"; 
 
-    // Run when DOM is ready
-    document.addEventListener("DOMContentLoaded", () => {
-      fetchDatabase();
-    });
+    // Dynamic Tab Navigation Manager
+    function switchTab(index) {
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`tabBtn-${i}`);
+        const content = document.getElementById(`tabContent-${i}`);
+        
+        if (i === index) {
+          btn.className = "flex-1 py-3 text-xl md:text-2xl text-center rounded-lg transition-all focus:outline-none bg-blue-500 text-white font-bold";
+          content.classList.remove("hidden");
+        } else {
+          btn.className = "flex-1 py-3 text-xl md:text-2xl text-center rounded-lg transition-all focus:outline-none text-gray-500 hover:bg-gray-100";
+          content.classList.add("hidden");
+        }
+      }
+    }
 
     // Helper: Standardize legacy input genders to clean M/F strings 
     function normalizeGender(genderStr) {
@@ -484,15 +519,15 @@
       document.getElementById("globalSpinner").classList.add("hidden");
     }
 
-    // Read students from GAS
+    // Read students and teacher directories from GAS
     async function fetchDatabase() {
       if (!SCRIPT_URL || SCRIPT_URL.includes("...")) {
         setListMessage("⚠️ Set the Google Apps Script SCRIPT_URL inside the script tag.");
+        hideSpinner();
         return;
       }
 
-      showSpinner("Loading school database...");
-      setListMessage("Fetching records...");
+      showSpinner("Syncing registries...");
       try {
         const response = await fetch(SCRIPT_URL, {
           method: 'POST',
@@ -501,10 +536,12 @@
         const result = await response.json();
         
         if (result.status === "success") {
-          studentsData = result.data;
-          renderStudentList(studentsData);
+          studentsData = result.data || [];
+          teachersData = result.teachers || [];
+          
           populateClassSelector(); 
-          calculateSchoolStatistics(); // Update dynamic school-wide stats summary
+          calculateSchoolStatistics(); // Refresh school-wide stats tables
+          renderTeacherRecordsTable(); // Refresh teacher listings
         } else {
           setListMessage(`Error: ${result.message}`);
         }
@@ -516,14 +553,38 @@
       }
     }
 
-    // Tabular Statistics Panel Populator (Classwise splits integrated)
-    function calculateSchoolStatistics() {
-      const summarySec = document.getElementById("schoolSummarySection");
-      if (!studentsData || studentsData.length === 0) {
-        summarySec.classList.add("hidden");
+    // Render teacher records grid
+    function renderTeacherRecordsTable() {
+      const tbody = document.getElementById("teacherRecordsBody");
+      if (!teachersData || teachersData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-gray-400">No teacher assignments found.</td></tr>`;
         return;
       }
-      summarySec.classList.remove("hidden");
+
+      tbody.innerHTML = teachersData.map(t => `
+        <tr class="hover:bg-gray-50 border-b text-xs">
+          <td class="border border-gray-300 px-3 py-1.5 font-semibold text-gray-900">${t["Class and Division"]}</td>
+          <td class="border border-gray-300 px-3 py-1.5 font-medium">${t["Teacher Name"]}</td>
+          <td class="border border-gray-300 px-3 py-1.5">${t["Mobile Number"]}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Unified School Statistics Tables Populator (Classwise splits integrated)
+    function calculateSchoolStatistics() {
+      const divBody = document.getElementById("statDivisionBody");
+      const divFoot = document.getElementById("statDivisionFoot");
+      const langBody = document.getElementById("statLanguageBody");
+      const langFoot = document.getElementById("statLanguageFoot");
+
+      if (!studentsData || studentsData.length === 0) {
+        const noDataHTML = `<tr><td colspan="5" class="text-center py-6 text-gray-400">No records found in active Google Sheets directory.</td></tr>`;
+        divBody.innerHTML = noDataHTML;
+        divFoot.innerHTML = "";
+        langBody.innerHTML = noDataHTML;
+        langFoot.innerHTML = "";
+        return;
+      }
 
       // --------------------------------------------------
       // Table 1: Division-wise Breakdown Logic
@@ -552,18 +613,15 @@
         }
       });
 
-      const divBody = document.getElementById("statDivisionBody");
-      const divFoot = document.getElementById("statDivisionFoot");
-
       // Render Table 1 Body
       divBody.innerHTML = Object.keys(divMap).sort().map(cls => {
         const d = divMap[cls];
         return `
           <tr class="hover:bg-gray-50">
-            <td class="px-4 py-2 font-medium text-gray-900">${cls}</td>
-            <td class="px-4 py-2 text-center text-blue-600 font-semibold">${d.m}</td>
-            <td class="px-4 py-2 text-center text-pink-600 font-semibold">${d.f}</td>
-            <td class="px-4 py-2 text-right font-bold text-gray-900">${d.total}</td>
+            <td class="border border-gray-300 px-3 py-2 font-semibold text-gray-950">${cls}</td>
+            <td class="border border-gray-300 px-3 py-2 text-center text-blue-600 font-semibold">${d.m}</td>
+            <td class="border border-gray-300 px-3 py-2 text-center text-pink-600 font-semibold">${d.f}</td>
+            <td class="border border-gray-300 px-3 py-2 text-right font-bold text-gray-900">${d.total}</td>
           </tr>
         `;
       }).join('');
@@ -571,15 +629,15 @@
       // Render Table 1 Footer (Grand total row)
       divFoot.innerHTML = `
         <tr>
-          <td class="px-4 py-2 text-left uppercase tracking-wider">Grand total</td>
-          <td class="px-4 py-2 text-center text-blue-800 font-extrabold">${totalM}</td>
-          <td class="px-4 py-2 text-center text-pink-800 font-extrabold">${totalF}</td>
-          <td class="px-4 py-2 text-right text-gray-900 font-extrabold">${overallTotal}</td>
+          <td class="border border-gray-300 px-3 py-2 text-left uppercase tracking-wider">Grand total</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-blue-800 font-extrabold">${totalM}</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-pink-800 font-extrabold">${totalF}</td>
+          <td class="border border-gray-300 px-3 py-2 text-right text-gray-900 font-extrabold">${overallTotal}</td>
         </tr>
       `;
 
       // --------------------------------------------------
-      // Table 2: First Language Enrollment & Class-wise Distribution
+      // Table 2: First Language Statistics (Strictly ARABIC, MAL, SKT)
       // --------------------------------------------------
       const langClassMap = {};
       let grandLangM = 0;
@@ -587,7 +645,14 @@
       let grandLangTotal = 0;
 
       studentsData.forEach(student => {
-        const lang = student["First Language"] || "Not Specified";
+        let rawLang = (student["First Language"] || "").toString().trim().toUpperCase();
+        let lang = "";
+
+        if (rawLang.includes("ARABIC") || rawLang.startsWith("ARA")) lang = "ARABIC";
+        else if (rawLang.includes("MALAYALAM") || rawLang.startsWith("MAL")) lang = "MAL";
+        else if (rawLang.includes("SANSKRIT") || rawLang.startsWith("SKT") || rawLang.startsWith("SAN")) lang = "SKT";
+        else return; // Skip non-configured languages
+
         const cls = student["Class and Division"] || "Unknown";
         const gender = normalizeGender(student["Gender"]);
         const key = `${lang}||${cls}`;
@@ -607,79 +672,73 @@
         }
       });
 
-      // Sort Language elements first by name, then by Class/Div
       const sortedLangRows = Object.values(langClassMap).sort((a, b) => {
         const langCompare = a.lang.localeCompare(b.lang);
         if (langCompare !== 0) return langCompare;
         return a.cls.localeCompare(b.cls);
       });
 
-      const langBody = document.getElementById("statLanguageBody");
-      const langFoot = document.getElementById("statLanguageFoot");
-
       // Render Table 2 Body
-      langBody.innerHTML = sortedLangRows.map(row => {
-        return `
-          <tr class="hover:bg-gray-50">
-            <td class="px-4 py-2 font-semibold text-emerald-800">${row.lang}</td>
-            <td class="px-4 py-2 font-medium text-gray-700">${row.cls}</td>
-            <td class="px-4 py-2 text-center text-blue-600 font-semibold">${row.m}</td>
-            <td class="px-4 py-2 text-center text-pink-600 font-semibold">${row.f}</td>
-            <td class="px-4 py-2 text-right font-bold text-gray-900">${row.total}</td>
-          </tr>
-        `;
-      }).join('');
+      langBody.innerHTML = sortedLangRows.map(row => `
+        <tr class="hover:bg-gray-50">
+          <td class="border border-gray-300 px-3 py-2 font-bold text-emerald-800">${row.lang}</td>
+          <td class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">${row.cls}</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-blue-600 font-semibold">${row.m}</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-pink-600 font-semibold">${row.f}</td>
+          <td class="border border-gray-300 px-3 py-2 text-right font-bold text-gray-950">${row.total}</td>
+        </tr>
+      `).join('');
 
       // Render Table 2 Footer (Grand total row)
       langFoot.innerHTML = `
         <tr>
-          <td class="px-4 py-2 text-left uppercase tracking-wider" colspan="2">Grand total</td>
-          <td class="px-4 py-2 text-center text-blue-800 font-extrabold">${grandLangM}</td>
-          <td class="px-4 py-2 text-center text-pink-800 font-extrabold">${grandLangF}</td>
-          <td class="px-4 py-2 text-right text-gray-900 font-extrabold">${grandLangTotal}</td>
+          <td class="border border-gray-300 px-3 py-2 text-left uppercase tracking-wider" colspan="2">Grand total</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-blue-800 font-extrabold">${grandLangM}</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-pink-800 font-extrabold">${grandLangF}</td>
+          <td class="border border-gray-300 px-3 py-2 text-right text-gray-950 font-extrabold">${grandLangTotal}</td>
         </tr>
       `;
     }
 
     function setListMessage(message) {
       document.getElementById("studentListContainer").innerHTML = `
-        <div class="text-center py-8 text-gray-500 text-sm">${message}</div>
+        <div class="text-center py-12 text-gray-500 text-xs">${message}</div>
       `;
     }
 
-    function renderStudentList(list) {
-      const container = document.getElementById("studentListContainer");
-      if (list.length === 0) {
-        container.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm">No matched records found</div>`;
-        return;
-      }
-
-      container.innerHTML = list.map((student, index) => {
-        const photo = student["IMG URL"] || "https://placehold.co/100";
-        return `
-          <div onclick="selectStudent('${student['Admission Number']}')" class="flex items-center gap-3 p-3 border-b hover:bg-blue-50 cursor-pointer transition">
-            <img src="${photo}" class="w-10 h-10 object-cover rounded-full bg-gray-100 flex-shrink-0">
-            <div class="flex-1 min-w-0">
-              <h4 class="text-sm font-semibold text-gray-900 truncate">${student["Name"]}</h4>
-              <p class="text-xs text-gray-500">Adm No: ${student["Admission Number"]} | Class: ${student["Class and Division"]}</p>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function filterStudents() {
+    // Dynamic Live-typing search matching logic
+    function handleTypingSearch() {
       const query = document.getElementById("searchInput").value.toLowerCase().trim();
+      const container = document.getElementById("studentListContainer");
+
       if (!query) {
-        renderStudentList(studentsData);
+        container.innerHTML = `<div class="text-center py-12 text-gray-400 text-xs">Begin typing to fetch matches...</div>`;
         return;
       }
-      const filtered = studentsData.filter(student => {
+
+      const matches = studentsData.filter(student => {
         const name = (student["Name"] || "").toString().toLowerCase();
         const adm = (student["Admission Number"] || "").toString().toLowerCase();
         return name.includes(query) || adm.includes(query);
       });
-      renderStudentList(filtered);
+
+      if (matches.length === 0) {
+        container.innerHTML = `<div class="text-center py-12 text-gray-400 text-xs">No matching records found</div>`;
+        return;
+      }
+
+      container.innerHTML = matches.map(student => {
+        const photo = student["IMG URL"] || "https://placehold.co/100";
+        return `
+          <div onclick="selectStudent('${student['Admission Number']}')" class="flex items-center gap-3 p-2 border border-gray-200 rounded bg-white hover:bg-blue-50 cursor-pointer transition">
+            <img src="${photo}" class="w-8 h-8 object-cover rounded-full bg-gray-100 flex-shrink-0">
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-semibold text-gray-900 truncate">${student["Name"]}</h4>
+              <p class="text-[10px] text-gray-500">Adm: ${student["Admission Number"]} | Class: ${student["Class and Division"]}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function selectStudent(admNo) {
@@ -736,11 +795,6 @@
         document.getElementById(id).disabled = disabled;
       });
       document.getElementById("btnCameraOpen").disabled = disabled;
-      if (disabled) {
-        document.getElementById("btnCameraOpen").classList.add("opacity-50", "cursor-not-allowed");
-      } else {
-        document.getElementById("btnCameraOpen").classList.remove("opacity-50", "cursor-not-allowed");
-      }
     }
 
     function showFormForAdd() {
@@ -796,10 +850,174 @@
     }
 
     // ----------------------------------------------------
+    // TEACHERS SECTION ACTIONS
+    // ----------------------------------------------------
+    async function handleSaveTeacher(e) {
+      e.preventDefault();
+      const cls = document.getElementById("t_class").value.trim();
+      const name = document.getElementById("t_name").value.trim();
+      const mobile = document.getElementById("t_mobile").value.trim();
+
+      showSpinner("Saving teacher specifications...");
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'saveTeacher',
+            data: {
+              "Class and Division": cls,
+              "Teacher Name": name,
+              "Mobile Number": mobile
+            }
+          })
+        });
+        const result = await response.json();
+        if (result.status === "success") {
+          alert(result.message);
+          document.getElementById("teacherConfigForm").reset();
+          await fetchDatabase();
+        } else {
+          alert(result.message);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        hideSpinner();
+      }
+    }
+
+    // ----------------------------------------------------
+    // QUICK PHOTO UPLOADER
+    // ----------------------------------------------------
+    function handleQuickSearch() {
+      const query = document.getElementById("quickSearchInput").value.toLowerCase().trim();
+      const resultsDiv = document.getElementById("quickSearchResults");
+
+      if (!query) {
+        resultsDiv.innerHTML = "";
+        resultsDiv.classList.add("hidden");
+        return;
+      }
+
+      const matches = studentsData.filter(s => {
+        const name = (s["Name"] || "").toString().toLowerCase();
+        const adm = (s["Admission Number"] || "").toString().toLowerCase();
+        return name.includes(query) || adm.includes(query);
+      });
+
+      if (matches.length === 0) {
+        resultsDiv.innerHTML = `<div class="p-3 text-xs text-gray-400 text-center">No matching students found</div>`;
+        resultsDiv.classList.remove("hidden");
+        return;
+      }
+
+      resultsDiv.innerHTML = matches.map(s => `
+        <div onclick="selectQuickStudent('${s["Admission Number"]}')" class="p-2 text-xs text-gray-700 hover:bg-blue-50 cursor-pointer flex justify-between items-center border-b">
+          <span><strong>${s["Name"]}</strong> (Adm: ${s["Admission Number"]})</span>
+          <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">${s["Class and Division"]}</span>
+        </div>
+      `).join('');
+      resultsDiv.classList.remove("hidden");
+    }
+
+    function selectQuickStudent(admNo) {
+      const student = studentsData.find(s => s["Admission Number"].toString() === admNo.toString());
+      if (!student) return;
+
+      quickSelectedStudent = student;
+      quickUploadBlob = null; 
+
+      document.getElementById("quick_name").innerText = student["Name"] || "";
+      document.getElementById("quick_adm").innerText = student["Admission Number"] || "";
+      document.getElementById("quick_class").innerText = student["Class and Division"] || "";
+
+      const existingPhoto = student["IMG URL"] || "https://placehold.co/150";
+      document.getElementById("quickImgPreview").src = existingPhoto;
+      document.getElementById("quickImgInput").value = "";
+
+      document.getElementById("quickConfirmBox").classList.remove("hidden");
+      document.getElementById("quickUploadControls").classList.remove("hidden");
+      document.getElementById("quickSearchResults").classList.add("hidden");
+      document.getElementById("quickSearchInput").value = "";
+    }
+
+    function handleQuickFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        quickUploadBlob = file;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById("quickImgPreview").src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    async function submitQuickPhoto() {
+      if (!quickSelectedStudent) return;
+      if (!quickUploadBlob) {
+        alert("Please select or capture a new photo first.");
+        return;
+      }
+
+      showSpinner("Uploading student photo to ImgBB...");
+      let finalImgUrl = "";
+      try {
+        const formData = new FormData();
+        formData.append("image", quickUploadBlob, "quick_photo.jpg");
+
+        const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+          method: "POST",
+          body: formData
+        });
+        const resJson = await imgbbResponse.json();
+        
+        if (resJson.success) {
+          finalImgUrl = resJson.data.url;
+        } else {
+          alert(`Image upload error: ${resJson.error.message}`);
+          hideSpinner();
+          return;
+        }
+
+        showSpinner("Syncing update with database...");
+        const payload = {
+          action: "update",
+          data: {
+            "Admission Number": quickSelectedStudent["Admission Number"],
+            "IMG URL": finalImgUrl
+          }
+        };
+
+        const response = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+
+        if (result.status === "success") {
+          alert("Student photo updated successfully.");
+          document.getElementById("quickConfirmBox").classList.add("hidden");
+          document.getElementById("quickUploadControls").classList.add("hidden");
+          quickSelectedStudent = null;
+          quickUploadBlob = null;
+          await fetchDatabase();
+        } else {
+          alert(`Database sync failed: ${result.message}`);
+        }
+      } catch (err) {
+        alert("Failed to execute quick photo update. Verify parameters.");
+        console.error(err);
+      } finally {
+        hideSpinner();
+      }
+    }
+
+    // ----------------------------------------------------
     // SYSTEM CAMERA INTEGRATION
     // ----------------------------------------------------
     async function openCameraModal(target = "main") {
-      cameraContextTarget = target; // Tracks flow context
+      cameraContextTarget = target; 
       const modal = document.getElementById("cameraModal");
       const toggleBtn = document.getElementById("btnToggleCameraFacing");
       
@@ -888,148 +1106,6 @@
     }
 
     // ----------------------------------------------------
-    // QUICK PHOTO UPLOADER LOGIC
-    // ----------------------------------------------------
-    function handleQuickSearch() {
-      const query = document.getElementById("quickSearchInput").value.toLowerCase().trim();
-      const resultsDiv = document.getElementById("quickSearchResults");
-
-      if (!query) {
-        resultsDiv.innerHTML = "";
-        resultsDiv.classList.add("hidden");
-        return;
-      }
-
-      const matches = studentsData.filter(s => {
-        const name = (s["Name"] || "").toString().toLowerCase();
-        const adm = (s["Admission Number"] || "").toString().toLowerCase();
-        return name.includes(query) || adm.includes(query);
-      });
-
-      if (matches.length === 0) {
-        resultsDiv.innerHTML = `<div class="p-3 text-xs text-gray-400 text-center">No matching students found</div>`;
-        resultsDiv.classList.remove("hidden");
-        return;
-      }
-
-      resultsDiv.innerHTML = matches.map(s => `
-        <div onclick="selectQuickStudent('${s["Admission Number"]}')" class="p-2.5 text-xs text-gray-700 hover:bg-blue-50 cursor-pointer transition flex justify-between items-center">
-          <span><strong>${s["Name"]}</strong> (Adm: ${s["Admission Number"]})</span>
-          <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">${s["Class and Division"]}</span>
-        </div>
-      `).join('');
-      resultsDiv.classList.remove("hidden");
-    }
-
-    function selectQuickStudent(admNo) {
-      const student = studentsData.find(s => s["Admission Number"].toString() === admNo.toString());
-      if (!student) return;
-
-      quickSelectedStudent = student;
-      quickUploadBlob = null; // Clear old uploads
-
-      // Update text fields
-      document.getElementById("quick_name").innerText = student["Name"] || "";
-      document.getElementById("quick_adm").innerText = student["Admission Number"] || "";
-      document.getElementById("quick_class").innerText = student["Class and Division"] || "";
-
-      // Load existing photo preview
-      const existingPhoto = student["IMG URL"] || "https://placehold.co/150";
-      document.getElementById("quickImgPreview").src = existingPhoto;
-
-      // Reset file input
-      document.getElementById("quickImgInput").value = "";
-
-      // Reveal controls
-      document.getElementById("quickConfirmBox").classList.remove("hidden");
-      document.getElementById("quickUploadControls").classList.remove("hidden");
-      document.getElementById("quickSearchResults").classList.add("hidden");
-      document.getElementById("quickSearchInput").value = "";
-    }
-
-    function handleQuickFileSelect(event) {
-      const file = event.target.files[0];
-      if (file) {
-        quickUploadBlob = file;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById("quickImgPreview").src = e.target.result;
-        }
-        reader.readAsDataURL(file);
-      }
-    }
-
-    async function submitQuickPhoto() {
-      if (!quickSelectedStudent) {
-        alert("Please select a target student to update.");
-        return;
-      }
-      if (!quickUploadBlob) {
-        alert("Please select or capture a new photo first.");
-        return;
-      }
-
-      showSpinner("Uploading student photo to ImgBB...");
-      
-      let finalImgUrl = "";
-      try {
-        const formData = new FormData();
-        formData.append("image", quickUploadBlob, "quick_photo.jpg");
-
-        const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-          method: "POST",
-          body: formData
-        });
-        const resJson = await imgbbResponse.json();
-        
-        if (resJson.success) {
-          finalImgUrl = resJson.data.url;
-        } else {
-          alert(`Image upload error: ${resJson.error.message}`);
-          hideSpinner();
-          return;
-        }
-
-        showSpinner("Syncing update with database...");
-
-        // Push only the image change to the target student entry
-        const payload = {
-          action: "update",
-          data: {
-            "Admission Number": quickSelectedStudent["Admission Number"],
-            "IMG URL": finalImgUrl
-          }
-        };
-
-        const response = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify(payload)
-        });
-        const result = await response.json();
-
-        if (result.status === "success") {
-          alert("Student photo updated successfully.");
-          
-          // Clear layout
-          document.getElementById("quickConfirmBox").classList.add("hidden");
-          document.getElementById("quickUploadControls").classList.add("hidden");
-          quickSelectedStudent = null;
-          quickUploadBlob = null;
-
-          // Sync local dataset
-          await fetchDatabase();
-        } else {
-          alert(`Database sync failed: ${result.message}`);
-        }
-      } catch (err) {
-        alert("Failed to execute quick photo update. Verify parameters.");
-        console.error(err);
-      } finally {
-        hideSpinner();
-      }
-    }
-
-    // ----------------------------------------------------
     // CLASS DIRECTORY UTILITIES
     // ----------------------------------------------------
     function populateClassSelector() {
@@ -1047,7 +1123,7 @@
       const tbody = document.getElementById("classReportBody");
 
       if (!selectedClass) {
-        tbody.innerHTML = `<tr><td colspan="19" class="text-center py-8 text-gray-400">Select a Class & Division to load data...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="19" class="text-center py-8 text-gray-400">Select a Class & Division to load roster...</td></tr>`;
         return;
       }
 
@@ -1091,8 +1167,8 @@
     }
 
     /**
-     * Dispatch Simplified Selected Class Details directly to the Class Teacher via WhatsApp to +919497731772
-     * Formats strictly: Sl No, Admission Number, Name, Gender with statistical summaries.
+     * Dispatch Simplified Selected Class Details directly to the registered Class Teacher's WhatsApp number
+     * Demographics: Religion, Caste, and Category-wise Breakdowns with M, F, and Total
      */
     function shareClassToTeacher() {
       const selectedClass = document.getElementById("classDivSelector").value;
@@ -1107,13 +1183,26 @@
         return;
       }
 
+      // Check registered teacher mobile number
+      const teacherObj = teachersData.find(t => t["Class and Division"].toString().trim() === selectedClass.toString().trim());
+      if (!teacherObj) {
+        alert(`No teacher registered for ${selectedClass}. Set registration configurations in tab 5 first.`);
+        return;
+      }
+      const targetPhone = teacherObj["Mobile Number"].toString().replace(/[^0-9]/g, "");
+
       // 1. Header Information
       let report = `*CLASS DIRECTORY ROSTER - ${selectedClass}*\n`;
+      report += `*Class Teacher:* ${teacherObj["Teacher Name"]}\n`;
       report += `==============================\n\n`;
 
       let totalM = 0;
       let totalF = 0;
-      const langCountMap = {};
+      const langCountMap = { "ARABIC": { total:0, m:0, f:0 }, "MAL": { total:0, m:0, f:0 }, "SKT": { total:0, m:0, f:0 } };
+      
+      const religionMap = {};
+      const casteMap = {};
+      const categoryMap = {};
 
       // 2. Tabulated Student Records (Strictly Sl No, Adm No, Name, Gender)
       filtered.forEach((s, idx) => {
@@ -1121,14 +1210,39 @@
         if (gender === "M") totalM++;
         else if (gender === "F") totalF++;
 
-        // Track First Language totals
-        const fl = s["First Language"] || "Not Specified";
-        if (!langCountMap[fl]) {
-          langCountMap[fl] = { total: 0, boys: 0, girls: 0 };
+        // Track First Language totals (Only ARABIC, MAL, SKT as specified)
+        const rawLang = s["First Language"] || "";
+        let langKey = "";
+        if (/arab/i.test(rawLang)) langKey = "ARABIC";
+        else if (/mal/i.test(rawLang)) langKey = "MAL";
+        else if (/skt|sans/i.test(rawLang)) langKey = "SKT";
+
+        if (langKey) {
+          langCountMap[langKey].total++;
+          if (gender === "M") langCountMap[langKey].m++;
+          else if (gender === "F") langCountMap[langKey].f++;
         }
-        langCountMap[fl].total++;
-        if (gender === "M") langCountMap[fl].boys++;
-        else if (gender === "F") langCountMap[fl].girls++;
+
+        // Track Religion
+        const rel = s["Religion"] ? s["Religion"].trim() : "Not Specified";
+        if (!religionMap[rel]) religionMap[rel] = { m: 0, f: 0, total: 0 };
+        religionMap[rel].total++;
+        if (gender === "M") religionMap[rel].m++;
+        else if (gender === "F") religionMap[rel].f++;
+
+        // Track Caste
+        const caste = s["Caste"] ? s["Caste"].trim() : "Not Specified";
+        if (!casteMap[caste]) casteMap[caste] = { m: 0, f: 0, total: 0 };
+        casteMap[caste].total++;
+        if (gender === "M") casteMap[caste].m++;
+        else if (gender === "F") casteMap[caste].f++;
+
+        // Track Category
+        const cat = s["Category"] ? s["Category"].trim() : "Not Specified";
+        if (!categoryMap[cat]) categoryMap[cat] = { m: 0, f: 0, total: 0 };
+        categoryMap[cat].total++;
+        if (gender === "M") categoryMap[cat].m++;
+        else if (gender === "F") categoryMap[cat].f++;
 
         report += `${idx + 1}. [Adm: ${s["Admission Number"]}] *${s["Name"]}* (${gender})\n`;
       });
@@ -1143,11 +1257,30 @@
       report += `*FIRST LANGUAGE DISTRIBUTION*\n`;
       Object.keys(langCountMap).sort().forEach(lang => {
         const data = langCountMap[lang];
-        report += `• ${lang}: *${data.total}* (M: ${data.boys} | F: ${data.girls})\n`;
+        report += `• ${lang}: *${data.total}* (M: ${data.m} | F: ${data.f})\n`;
       });
 
-      // Target phone is strictly hardcoded to +919497731772
-      const targetPhone = "919497731772";
+      // 4. Religion Breakdown
+      report += `\n*RELIGION DISTRIBUTION*\n`;
+      Object.keys(religionMap).sort().forEach(rel => {
+        const data = religionMap[rel];
+        report += `• ${rel}: *${data.total}* (M: ${data.m} | F: ${data.f})\n`;
+      });
+
+      // 5. Caste Breakdown
+      report += `\n*CASTE DISTRIBUTION*\n`;
+      Object.keys(casteMap).sort().forEach(c => {
+        const data = casteMap[c];
+        report += `• ${c}: *${data.total}* (M: ${data.m} | F: ${data.f})\n`;
+      });
+
+      // 6. Category Breakdown
+      report += `\n*CATEGORY DISTRIBUTION*\n`;
+      Object.keys(categoryMap).sort().forEach(cat => {
+        const data = categoryMap[cat];
+        report += `• ${cat}: *${data.total}* (M: ${data.m} | F: ${data.f})\n`;
+      });
+
       const encoded = encodeURIComponent(report);
       window.open(`https://api.whatsapp.com/send?phone=${targetPhone}&text=${encoded}`, '_blank');
     }
