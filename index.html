@@ -54,14 +54,14 @@
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
 
-  <!-- Global Loading Spinner Overlay (Always active during sync/save/busy) -->
-  <div id="globalSpinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center space-y-4">
+  <!-- Global Loading Spinner Overlay (Starts hidden to prevent boot hangs) -->
+  <div id="globalSpinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex flex-col items-center justify-center space-y-4">
     <!-- Tailwind SVG Spinner -->
     <svg class="animate-spin h-14 w-14 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
     </svg>
-    <p id="spinnerMessage" class="text-white text-sm font-semibold tracking-wide">Initializing system registry...</p>
+    <p id="spinnerMessage" class="text-white text-sm font-semibold tracking-wide">Please wait...</p>
   </div>
 
   <div class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
@@ -285,10 +285,10 @@
           <select id="classDivSelector" onchange="generateClassReportTable()" class="text-xs border border-gray-300 rounded px-2.5 py-1.5 bg-white">
             <option value="">Select Class & Division</option>
           </select>
-          <button onclick="shareClassToTeacher()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1.5 rounded text-xs transition flex items-center gap-1">
+          <button onclick="shareClassToTeacher()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded text-sm transition flex items-center gap-1">
             💬 WhatsApp Class to Teacher
           </button>
-          <button onclick="printClassReport()" class="bg-gray-800 hover:bg-gray-900 text-white font-medium px-3 py-1.5 rounded text-xs transition flex items-center gap-1">
+          <button onclick="printClassReport()" class="bg-gray-800 hover:bg-gray-900 text-white font-medium px-4 py-2 rounded text-sm transition flex items-center gap-1">
             🖨️ Print Class List (Landscape A4)
           </button>
         </div>
@@ -697,12 +697,6 @@
           <td class="border border-gray-300 px-3 py-2 text-center text-pink-800 font-extrabold">${grandLangF}</td>
           <td class="border border-gray-300 px-3 py-2 text-right text-gray-950 font-extrabold">${grandLangTotal}</td>
         </tr>
-      `;
-    }
-
-    function setListMessage(message) {
-      document.getElementById("studentListContainer").innerHTML = `
-        <div class="text-center py-12 text-gray-500 text-xs">${message}</div>
       `;
     }
 
