@@ -182,7 +182,7 @@
                 <label class="block text-xs font-semibold text-gray-600 uppercase">Student Photo</label>
                 <div class="flex flex-col sm:flex-row gap-2">
                   <input type="file" id="formImgInput" accept="image/*" onchange="handleFileSelect(event)" class="text-sm file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full border rounded p-1 bg-white">
-                  <button type="button" id="btnCameraOpen" onclick="openCameraModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded text-xs transition flex-shrink-0 flex items-center justify-center gap-1">
+                  <button type="button" id="btnCameraOpen" onclick="openCameraModal('main')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded text-xs transition flex-shrink-0 flex items-center justify-center gap-1">
                     📸 Camera
                   </button>
                 </div>
@@ -327,6 +327,63 @@
         </table>
       </div>
     </section>
+
+    <!-- NEW SECTION: Quick Photo Uploader -->
+    <section class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="border-b pb-4 mb-4">
+        <h2 class="text-xl font-semibold text-gray-900">Quick Photo Uploader</h2>
+        <p class="text-xs text-gray-500">Search for a student to instantly update their photograph using files or a direct camera feed.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Search and Selection area -->
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Search Student Name or Adm No</label>
+            <input type="text" id="quickSearchInput" oninput="handleQuickSearch()" placeholder="Type to search..." class="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+
+          <!-- Dynamic search matches -->
+          <div id="quickSearchResults" class="border rounded-md divide-y divide-gray-100 max-h-40 overflow-y-auto hidden bg-white shadow-inner">
+            <!-- Matches populate here -->
+          </div>
+
+          <!-- Selected Student Info Card -->
+          <div id="quickConfirmBox" class="p-4 bg-gray-50 border rounded-lg hidden space-y-2">
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400">Target Student Selected</h4>
+            <div class="text-sm space-y-1 text-gray-700">
+              <p>Name: <strong id="quick_name" class="text-gray-900">-</strong></p>
+              <p>Admission No: <strong id="quick_adm" class="text-gray-900">-</strong></p>
+              <p>Class & Division: <strong id="quick_class" class="text-gray-900">-</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo controls section (Hidden till selection is active) -->
+        <div id="quickUploadControls" class="space-y-4 hidden flex flex-col justify-between">
+          <div class="flex flex-col sm:flex-row items-center gap-4 bg-gray-50 p-4 rounded-lg">
+            <div class="w-24 h-24 bg-gray-200 rounded-md overflow-hidden border border-gray-300 flex items-center justify-center flex-shrink-0">
+              <img id="quickImgPreview" src="https://placehold.co/150" alt="Quick Preview" class="object-cover w-full h-full">
+            </div>
+            <div class="flex-1 w-full space-y-2">
+              <label class="block text-xs font-semibold text-gray-600 uppercase">Select New Photo</label>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input type="file" id="quickImgInput" accept="image/*" onchange="handleQuickFileSelect(event)" class="text-sm file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full border rounded p-1 bg-white">
+                <button type="button" onclick="openCameraModal('quick')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded text-xs transition flex-shrink-0 flex items-center justify-center gap-1">
+                  📸 Camera
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-4 border-t">
+            <button type="button" onclick="submitQuickPhoto()" class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded text-sm transition">
+              Confirm and Update Photo
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- Pure Print Wrapper Container (Targeted by CSS Page Breaks) -->
@@ -372,10 +429,13 @@
 
     // Image container object for dynamic camera uploads
     let activeImageBlob = null; 
+    let quickUploadBlob = null; // Separate blob for the Quick Upload flow
+    let quickSelectedStudent = null; // Selected student for Quick Photo flow
 
     // Camera context configurations
     let videoStream = null;
     let preferredCameraFacing = "user"; // "user" (front), "environment" (rear)
+    let cameraContextTarget = "main"; // Tracks source element: "main" (form input) or "quick" (quick uploader)
 
     // Run when DOM is ready
     document.addEventListener("DOMContentLoaded", () => {
@@ -738,7 +798,8 @@
     // ----------------------------------------------------
     // SYSTEM CAMERA INTEGRATION
     // ----------------------------------------------------
-    async function openCameraModal() {
+    async function openCameraModal(target = "main") {
+      cameraContextTarget = target; // Tracks flow context
       const modal = document.getElementById("cameraModal");
       const toggleBtn = document.getElementById("btnToggleCameraFacing");
       
@@ -810,14 +871,162 @@
 
       canvas.toBlob((blob) => {
         if (blob) {
-          activeImageBlob = blob; 
-          
           const dataURL = canvas.toDataURL("image/jpeg");
-          document.getElementById("formImgPreview").src = dataURL;
-          document.getElementById("formImgInput").value = "";
+          
+          if (cameraContextTarget === "main") {
+            activeImageBlob = blob; 
+            document.getElementById("formImgPreview").src = dataURL;
+            document.getElementById("formImgInput").value = "";
+          } else if (cameraContextTarget === "quick") {
+            quickUploadBlob = blob;
+            document.getElementById("quickImgPreview").src = dataURL;
+            document.getElementById("quickImgInput").value = "";
+          }
         }
         closeCameraModal();
       }, "image/jpeg", 0.9);
+    }
+
+    // ----------------------------------------------------
+    // QUICK PHOTO UPLOADER LOGIC
+    // ----------------------------------------------------
+    function handleQuickSearch() {
+      const query = document.getElementById("quickSearchInput").value.toLowerCase().trim();
+      const resultsDiv = document.getElementById("quickSearchResults");
+
+      if (!query) {
+        resultsDiv.innerHTML = "";
+        resultsDiv.classList.add("hidden");
+        return;
+      }
+
+      const matches = studentsData.filter(s => {
+        const name = (s["Name"] || "").toString().toLowerCase();
+        const adm = (s["Admission Number"] || "").toString().toLowerCase();
+        return name.includes(query) || adm.includes(query);
+      });
+
+      if (matches.length === 0) {
+        resultsDiv.innerHTML = `<div class="p-3 text-xs text-gray-400 text-center">No matching students found</div>`;
+        resultsDiv.classList.remove("hidden");
+        return;
+      }
+
+      resultsDiv.innerHTML = matches.map(s => `
+        <div onclick="selectQuickStudent('${s["Admission Number"]}')" class="p-2.5 text-xs text-gray-700 hover:bg-blue-50 cursor-pointer transition flex justify-between items-center">
+          <span><strong>${s["Name"]}</strong> (Adm: ${s["Admission Number"]})</span>
+          <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">${s["Class and Division"]}</span>
+        </div>
+      `).join('');
+      resultsDiv.classList.remove("hidden");
+    }
+
+    function selectQuickStudent(admNo) {
+      const student = studentsData.find(s => s["Admission Number"].toString() === admNo.toString());
+      if (!student) return;
+
+      quickSelectedStudent = student;
+      quickUploadBlob = null; // Clear old uploads
+
+      // Update text fields
+      document.getElementById("quick_name").innerText = student["Name"] || "";
+      document.getElementById("quick_adm").innerText = student["Admission Number"] || "";
+      document.getElementById("quick_class").innerText = student["Class and Division"] || "";
+
+      // Load existing photo preview
+      const existingPhoto = student["IMG URL"] || "https://placehold.co/150";
+      document.getElementById("quickImgPreview").src = existingPhoto;
+
+      // Reset file input
+      document.getElementById("quickImgInput").value = "";
+
+      // Reveal controls
+      document.getElementById("quickConfirmBox").classList.remove("hidden");
+      document.getElementById("quickUploadControls").classList.remove("hidden");
+      document.getElementById("quickSearchResults").classList.add("hidden");
+      document.getElementById("quickSearchInput").value = "";
+    }
+
+    function handleQuickFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        quickUploadBlob = file;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById("quickImgPreview").src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    async function submitQuickPhoto() {
+      if (!quickSelectedStudent) {
+        alert("Please select a target student to update.");
+        return;
+      }
+      if (!quickUploadBlob) {
+        alert("Please select or capture a new photo first.");
+        return;
+      }
+
+      showSpinner("Uploading student photo to ImgBB...");
+      
+      let finalImgUrl = "";
+      try {
+        const formData = new FormData();
+        formData.append("image", quickUploadBlob, "quick_photo.jpg");
+
+        const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+          method: "POST",
+          body: formData
+        });
+        const resJson = await imgbbResponse.json();
+        
+        if (resJson.success) {
+          finalImgUrl = resJson.data.url;
+        } else {
+          alert(`Image upload error: ${resJson.error.message}`);
+          hideSpinner();
+          return;
+        }
+
+        showSpinner("Syncing update with database...");
+
+        // Push only the image change to the target student entry
+        const payload = {
+          action: "update",
+          data: {
+            "Admission Number": quickSelectedStudent["Admission Number"],
+            "IMG URL": finalImgUrl
+          }
+        };
+
+        const response = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+
+        if (result.status === "success") {
+          alert("Student photo updated successfully.");
+          
+          // Clear layout
+          document.getElementById("quickConfirmBox").classList.add("hidden");
+          document.getElementById("quickUploadControls").classList.add("hidden");
+          quickSelectedStudent = null;
+          quickUploadBlob = null;
+
+          // Sync local dataset
+          await fetchDatabase();
+        } else {
+          alert(`Database sync failed: ${result.message}`);
+        }
+      } catch (err) {
+        alert("Failed to execute quick photo update. Verify parameters.");
+        console.error(err);
+      } finally {
+        hideSpinner();
+      }
     }
 
     // ----------------------------------------------------
@@ -882,7 +1091,7 @@
     }
 
     /**
-     * Dispatch Simplified Selected Class Details directly to the Class Teacher via WhatsApp
+     * Dispatch Simplified Selected Class Details directly to the Class Teacher via WhatsApp to +919497731772
      * Formats strictly: Sl No, Admission Number, Name, Gender with statistical summaries.
      */
     function shareClassToTeacher() {
@@ -937,14 +1146,10 @@
         report += `• ${lang}: *${data.total}* (M: ${data.boys} | F: ${data.girls})\n`;
       });
 
-      const teacherNum = prompt("Enter Class Teacher's WhatsApp Number (include country code, e.g. 919876543210):", "");
-      let cleanPhone = "";
-      if (teacherNum) {
-        cleanPhone = teacherNum.replace(/[^0-9]/g, "");
-      }
-
+      // Target phone is strictly hardcoded to +919497731772
+      const targetPhone = "919497731772";
       const encoded = encodeURIComponent(report);
-      window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encoded}`, '_blank');
+      window.open(`https://api.whatsapp.com/send?phone=${targetPhone}&text=${encoded}`, '_blank');
     }
 
     /**
