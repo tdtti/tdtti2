@@ -61,7 +61,7 @@
       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
     </svg>
-    <p id="spinnerMessage" class="text-white text-sm font-semibold tracking-wide">Please wait...</p>
+    <p id="spinnerMessage" class="text-white text-sm font-semibold tracking-wide">Initializing system registry...</p>
   </div>
 
   <div class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
@@ -92,10 +92,12 @@
 
     <!-- TAB 1 CONTENT: School Statistics Summary Tables -->
     <div id="tabContent-1" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-6">
+      
+      <!-- Top Row: Division Breakdown & First Language Stats -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Table 1: Division-wise Breakdown -->
-        <div class="lg:col-span-5 flex flex-col">
-          <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Division-wise Breakdown</h3>
+        <!-- Table 1: Division-wise Breakdown with Subtotals -->
+        <div class="lg:col-span-6 flex flex-col">
+          <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Division-wise Breakdown (Class 5, 6, 7 & Consolidation)</h3>
           <div class="overflow-x-auto">
             <table class="min-w-full border-collapse border border-gray-300 text-xs text-left">
               <thead class="bg-gray-100">
@@ -118,9 +120,9 @@
           </div>
         </div>
 
-        <!-- Table 2: First Language Enrollment Table -->
-        <div class="lg:col-span-7 flex flex-col">
-          <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">First Language Statistics (ARABIC, MAL, SKT)</h3>
+        <!-- Table 2: First Language Statistics Table -->
+        <div class="lg:col-span-6 flex flex-col">
+          <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">First Language Statistics (ARABIC, MAL, SKT in Rows)</h3>
           <div class="overflow-x-auto">
             <table class="min-w-full border-collapse border border-gray-300 text-xs text-left">
               <thead class="bg-gray-100">
@@ -142,6 +144,32 @@
               </tfoot>
             </table>
           </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Religion, Caste & Category Breakdown Table -->
+      <div class="flex flex-col pt-4 border-t">
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Religion, Caste & Category wise breakdown summary</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full border-collapse border border-gray-300 text-xs text-left">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">Demographic Type</th>
+                <th class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">Group Name</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-semibold text-gray-700">M</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-semibold text-gray-700">F</th>
+                <th class="border border-gray-300 px-3 py-2 text-right font-semibold text-gray-700">Total</th>
+              </tr>
+            </thead>
+            <tbody id="statDemographicsBody" class="text-gray-700 bg-white">
+              <tr>
+                <td colspan="5" class="text-center py-4 text-gray-400">Syncing registry data...</td>
+              </tr>
+            </tbody>
+            <tfoot id="statDemographicsFoot" class="bg-gray-100 font-bold text-gray-900">
+              <!-- Demographics totals -->
+            </tfoot>
+          </table>
         </div>
       </div>
     </div>
@@ -285,10 +313,10 @@
           <select id="classDivSelector" onchange="generateClassReportTable()" class="text-xs border border-gray-300 rounded px-2.5 py-1.5 bg-white">
             <option value="">Select Class & Division</option>
           </select>
-          <button onclick="shareClassToTeacher()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded text-sm transition flex items-center gap-1">
+          <button onclick="shareClassToTeacher()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1.5 rounded text-xs transition flex items-center gap-1">
             💬 WhatsApp Class to Teacher
           </button>
-          <button onclick="printClassReport()" class="bg-gray-800 hover:bg-gray-900 text-white font-medium px-4 py-2 rounded text-sm transition flex items-center gap-1">
+          <button onclick="printClassReport()" class="bg-gray-800 hover:bg-gray-900 text-white font-medium px-3 py-1.5 rounded text-xs transition flex items-center gap-1">
             🖨️ Print Class List (Landscape A4)
           </button>
         </div>
@@ -461,6 +489,13 @@
     let preferredCameraFacing = "user"; 
     let cameraContextTarget = "main"; 
 
+    // Helper: Extract leading class digits safely (e.g., "5-A" -> 5, "10-B" -> 10)
+    function getClassLevel(clsStr) {
+      if (!clsStr) return 999; // Fallback to push unformatted values to bottom
+      const match = clsStr.toString().match(/^(\d+)/);
+      return match ? parseInt(match[1], 10) : 999;
+    }
+
     // Dynamic Tab Navigation Manager
     function switchTab(index) {
       for (let i = 1; i <= 5; i++) {
@@ -576,6 +611,8 @@
       const divFoot = document.getElementById("statDivisionFoot");
       const langBody = document.getElementById("statLanguageBody");
       const langFoot = document.getElementById("statLanguageFoot");
+      const demoBody = document.getElementById("statDemographicsBody");
+      const demoFoot = document.getElementById("statDemographicsFoot");
 
       if (!studentsData || studentsData.length === 0) {
         const noDataHTML = `<tr><td colspan="5" class="text-center py-6 text-gray-400">No records found in active Google Sheets directory.</td></tr>`;
@@ -583,61 +620,133 @@
         divFoot.innerHTML = "";
         langBody.innerHTML = noDataHTML;
         langFoot.innerHTML = "";
+        demoBody.innerHTML = noDataHTML;
+        demoFoot.innerHTML = "";
         return;
       }
 
       // --------------------------------------------------
-      // Table 1: Division-wise Breakdown Logic
+      // Table 1: Division-wise Breakdown with Subtotals (5, 6, 7 & Consolidation)
       // --------------------------------------------------
-      const divMap = {};
-      let totalM = 0;
-      let totalF = 0;
+      const divisions = [...new Set(studentsData.map(s => s["Class and Division"]))].filter(Boolean);
+      // Sort divisions naturally (5-A, 5-B, 6-A, etc.)
+      divisions.sort((a, b) => {
+        const lvlA = getClassLevel(a);
+        const lvlB = getClassLevel(b);
+        if (lvlA !== lvlB) return lvlA - lvlB;
+        return a.localeCompare(b);
+      });
+
+      let overallM = 0;
+      let overallF = 0;
       let overallTotal = 0;
 
-      studentsData.forEach(student => {
-        const cls = student["Class and Division"] || "Unknown";
-        const gender = normalizeGender(student["Gender"]);
-        
-        if (!divMap[cls]) {
-          divMap[cls] = { m: 0, f: 0, total: 0 };
-        }
-        divMap[cls].total++;
-        overallTotal++;
+      let class5M = 0, class5F = 0, class5T = 0;
+      let class6M = 0, class6F = 0, class6T = 0;
+      let class7M = 0, class7F = 0, class7T = 0;
+      let othersM = 0, othersF = 0, othersT = 0;
 
-        if (gender === "M") {
-          divMap[cls].m++;
-          totalM++;
-        } else if (gender === "F") {
-          divMap[cls].f++;
-          totalF++;
+      let hasClass5 = false, hasClass6 = false, hasClass7 = false, hasOthers = false;
+
+      let divHTML = "";
+
+      divisions.forEach(cls => {
+        const level = getClassLevel(cls);
+        const levelStudents = studentsData.filter(s => s["Class and Division"] === cls);
+        
+        let mM = 0, mF = 0, mT = 0;
+        levelStudents.forEach(s => {
+          const gen = normalizeGender(s["Gender"]);
+          mT++;
+          if (gen === "M") mM++;
+          else if (gen === "F") mF++;
+        });
+
+        // Add up overall totals
+        overallM += mM;
+        overallF += mF;
+        overallTotal += mT;
+
+        // Group-wise counters
+        if (level === 5) {
+          class5M += mM; class5F += mF; class5T += mT;
+          hasClass5 = true;
+        } else if (level === 6) {
+          class6M += mM; class6F += mF; class6T += mT;
+          hasClass6 = true;
+        } else if (level === 7) {
+          class7M += mM; class7F += mF; class7T += mT;
+          hasClass7 = true;
+        } else {
+          othersM += mM; othersF += mF; othersT += mT;
+          hasOthers = true;
+        }
+
+        divHTML += `
+          <tr class="hover:bg-gray-50">
+            <td class="border border-gray-300 px-3 py-1.5 font-semibold text-gray-950">${cls}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-600 font-semibold">${mM}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-center text-pink-600 font-semibold">${mF}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-right font-bold text-gray-900">${mT}</td>
+          </tr>
+        `;
+
+        // Check if next class division transitions to another level to inject subtotals
+        const nextCls = divisions[divisions.indexOf(cls) + 1];
+        const nextLvl = getClassLevel(nextCls);
+
+        if (level === 5 && nextLvl !== 5) {
+          divHTML += `
+            <tr class="bg-blue-50 font-bold">
+              <td class="border border-gray-300 px-3 py-1.5 uppercase text-blue-800">Class 5 Total</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-800">${class5M}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-800">${class5F}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-right text-blue-800">${class5T}</td>
+            </tr>
+          `;
+        } else if (level === 6 && nextLvl !== 6) {
+          divHTML += `
+            <tr class="bg-blue-50 font-bold">
+              <td class="border border-gray-300 px-3 py-1.5 uppercase text-blue-800">Class 6 Total</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-800">${class6M}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-800">${class6F}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-right text-blue-800">${class6T}</td>
+            </tr>
+          `;
+        } else if (level === 7 && nextLvl !== 7) {
+          divHTML += `
+            <tr class="bg-blue-50 font-bold">
+              <td class="border border-gray-300 px-3 py-1.5 uppercase text-blue-800">Class 7 Total</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-800">${class7M}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-800">${class7F}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-right text-blue-800">${class7T}</td>
+            </tr>
+          `;
+        } else if (nextCls === undefined && level !== 5 && level !== 6 && level !== 7 && hasOthers) {
+          // If we reach the end and have other non-primary divisions
+          divHTML += `
+            <tr class="bg-gray-100 font-bold">
+              <td class="border border-gray-300 px-3 py-1.5 uppercase text-gray-700">Others Total</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center text-gray-700">${othersM}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center text-gray-700">${othersF}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-right text-gray-700">${othersT}</td>
+            </tr>
+          `;
         }
       });
 
-      // Render Table 1 Body
-      divBody.innerHTML = Object.keys(divMap).sort().map(cls => {
-        const d = divMap[cls];
-        return `
-          <tr class="hover:bg-gray-50">
-            <td class="border border-gray-300 px-3 py-2 font-semibold text-gray-950">${cls}</td>
-            <td class="border border-gray-300 px-3 py-2 text-center text-blue-600 font-semibold">${d.m}</td>
-            <td class="border border-gray-300 px-3 py-2 text-center text-pink-600 font-semibold">${d.f}</td>
-            <td class="border border-gray-300 px-3 py-2 text-right font-bold text-gray-900">${d.total}</td>
-          </tr>
-        `;
-      }).join('');
-
-      // Render Table 1 Footer (Grand total row)
+      divBody.innerHTML = divHTML;
       divFoot.innerHTML = `
-        <tr>
-          <td class="border border-gray-300 px-3 py-2 text-left uppercase tracking-wider">Grand total</td>
-          <td class="border border-gray-300 px-3 py-2 text-center text-blue-800 font-extrabold">${totalM}</td>
-          <td class="border border-gray-300 px-3 py-2 text-center text-pink-800 font-extrabold">${totalF}</td>
-          <td class="border border-gray-300 px-3 py-2 text-right text-gray-900 font-extrabold">${overallTotal}</td>
+        <tr class="bg-gray-200 font-extrabold text-gray-950">
+          <td class="border border-gray-300 px-3 py-2 text-left uppercase">Grand Consolidation</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-blue-900">${overallM}</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-pink-900">${overallF}</td>
+          <td class="border border-gray-300 px-3 py-2 text-right">${overallTotal}</td>
         </tr>
       `;
 
       // --------------------------------------------------
-      // Table 2: First Language Statistics (Strictly ARABIC, MAL, SKT)
+      // Table 2: First Language Statistics Table (ARABIC, MAL, SKT in Row)
       // --------------------------------------------------
       const langClassMap = {};
       let grandLangM = 0;
@@ -678,25 +787,153 @@
         return a.cls.localeCompare(b.cls);
       });
 
-      // Render Table 2 Body
-      langBody.innerHTML = sortedLangRows.map(row => `
-        <tr class="hover:bg-gray-50">
-          <td class="border border-gray-300 px-3 py-2 font-bold text-emerald-800">${row.lang}</td>
-          <td class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">${row.cls}</td>
-          <td class="border border-gray-300 px-3 py-2 text-center text-blue-600 font-semibold">${row.m}</td>
-          <td class="border border-gray-300 px-3 py-2 text-center text-pink-600 font-semibold">${row.f}</td>
-          <td class="border border-gray-300 px-3 py-2 text-right font-bold text-gray-950">${row.total}</td>
-        </tr>
-      `).join('');
+      // Render Table 2 Body with Subtotals
+      let langHTML = "";
+      let currentLang = "";
+      let subLangM = 0, subLangF = 0, subLangT = 0;
 
-      // Render Table 2 Footer (Grand total row)
+      sortedLangRows.forEach((row, idx) => {
+        if (currentLang && currentLang !== row.lang) {
+          // Render language subtotal
+          langHTML += `
+            <tr class="bg-emerald-50 font-bold text-emerald-800">
+              <td class="border border-gray-300 px-3 py-1.5 uppercase" colspan="2">${currentLang} Subtotal</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center">${subLangM}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center">${subLangF}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-right">${subLangT}</td>
+            </tr>
+          `;
+          subLangM = 0; subLangF = 0; subLangT = 0;
+        }
+
+        currentLang = row.lang;
+        subLangM += row.m;
+        subLangF += row.f;
+        subLangT += row.total;
+
+        langHTML += `
+          <tr class="hover:bg-gray-50">
+            <td class="border border-gray-300 px-3 py-2 font-bold text-emerald-800">${row.lang}</td>
+            <td class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">${row.cls}</td>
+            <td class="border border-gray-300 px-3 py-2 text-center text-blue-600 font-semibold">${row.m}</td>
+            <td class="border border-gray-300 px-3 py-2 text-center text-pink-600 font-semibold">${row.f}</td>
+            <td class="border border-gray-300 px-3 py-2 text-right font-bold text-gray-950">${row.total}</td>
+          </tr>
+        `;
+
+        // Render trailing final Language Subtotal
+        if (idx === sortedLangRows.length - 1) {
+          langHTML += `
+            <tr class="bg-emerald-50 font-bold text-emerald-800">
+              <td class="border border-gray-300 px-3 py-1.5 uppercase" colspan="2">${row.lang} Subtotal</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center">${subLangM}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-center">${subLangF}</td>
+              <td class="border border-gray-300 px-3 py-1.5 text-right">${subLangT}</td>
+            </tr>
+          `;
+        }
+      });
+
+      langBody.innerHTML = langHTML;
       langFoot.innerHTML = `
-        <tr>
-          <td class="border border-gray-300 px-3 py-2 text-left uppercase tracking-wider" colspan="2">Grand total</td>
-          <td class="border border-gray-300 px-3 py-2 text-center text-blue-800 font-extrabold">${grandLangM}</td>
-          <td class="border border-gray-300 px-3 py-2 text-center text-pink-800 font-extrabold">${grandLangF}</td>
-          <td class="border border-gray-300 px-3 py-2 text-right text-gray-950 font-extrabold">${grandLangTotal}</td>
+        <tr class="bg-gray-200 font-extrabold text-gray-950">
+          <td class="border border-gray-300 px-3 py-2 text-left uppercase" colspan="2">Grand Language Total</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-blue-900">${grandLangM}</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-pink-900">${grandLangF}</td>
+          <td class="border border-gray-300 px-3 py-2 text-right">${grandLangTotal}</td>
         </tr>
+      `;
+
+      // --------------------------------------------------
+      // Table 3: Religion, Caste & Category Breakdown Table
+      // --------------------------------------------------
+      const religionMap = {};
+      const casteMap = {};
+      const categoryMap = {};
+
+      studentsData.forEach(student => {
+        const gender = normalizeGender(student["Gender"]);
+        const rel = student["Religion"] ? student["Religion"].toString().trim() : "Not Specified";
+        const caste = student["Caste"] ? student["Caste"].toString().trim() : "Not Specified";
+        const cat = student["Category"] ? student["Category"].toString().trim() : "Not Specified";
+
+        // Group religion
+        if (!religionMap[rel]) religionMap[rel] = { m: 0, f: 0, total: 0 };
+        religionMap[rel].total++;
+        if (gender === "M") religionMap[rel].m++;
+        else if (gender === "F") religionMap[rel].f++;
+
+        // Group caste
+        if (!casteMap[caste]) casteMap[caste] = { m: 0, f: 0, total: 0 };
+        casteMap[caste].total++;
+        if (gender === "M") casteMap[caste].m++;
+        else if (gender === "F") casteMap[caste].f++;
+
+        // Group category
+        if (!categoryMap[cat]) categoryMap[cat] = { m: 0, f: 0, total: 0 };
+        categoryMap[cat].total++;
+        if (gender === "M") categoryMap[cat].m++;
+        else if (gender === "F") categoryMap[cat].f++;
+      });
+
+      let demoHTML = "";
+
+      // 1. Render Religion Rows
+      Object.keys(religionMap).sort().forEach(rel => {
+        const d = religionMap[rel];
+        demoHTML += `
+          <tr class="hover:bg-gray-50">
+            <td class="border border-gray-300 px-3 py-1.5 font-bold text-blue-900">RELIGION</td>
+            <td class="border border-gray-300 px-3 py-1.5 font-semibold text-gray-700">${rel}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-600">${d.m}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-center text-pink-600">${d.f}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-right font-bold text-gray-900">${d.total}</td>
+          </tr>
+        `;
+      });
+
+      // 2. Render Caste Rows
+      Object.keys(casteMap).sort().forEach(c => {
+        const d = casteMap[c];
+        demoHTML += `
+          <tr class="hover:bg-gray-50">
+            <td class="border border-gray-300 px-3 py-1.5 font-bold text-purple-900">CASTE</td>
+            <td class="border border-gray-300 px-3 py-1.5 font-semibold text-gray-700">${c}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-600">${d.m}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-center text-pink-600">${d.f}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-right font-bold text-gray-900">${d.total}</td>
+          </tr>
+        `;
+      });
+
+      // 3. Render Category Rows
+      Object.keys(categoryMap).sort().forEach(cat => {
+        const d = categoryMap[cat];
+        demoHTML += `
+          <tr class="hover:bg-gray-50">
+            <td class="border border-gray-300 px-3 py-1.5 font-bold text-orange-950">CATEGORY</td>
+            <td class="border border-gray-300 px-3 py-1.5 font-semibold text-gray-700">${cat}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-center text-blue-600">${d.m}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-center text-pink-600">${d.f}</td>
+            <td class="border border-gray-300 px-3 py-1.5 text-right font-bold text-gray-900">${d.total}</td>
+          </tr>
+        `;
+      });
+
+      demoBody.innerHTML = demoHTML;
+      demoFoot.innerHTML = `
+        <tr class="bg-gray-200 font-extrabold text-gray-950">
+          <td class="border border-gray-300 px-3 py-2 text-left uppercase" colspan="2">Consolidated Demographics Total</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-blue-900">${overallM}</td>
+          <td class="border border-gray-300 px-3 py-2 text-center text-pink-900">${overallF}</td>
+          <td class="border border-gray-300 px-3 py-2 text-right">${overallTotal}</td>
+        </tr>
+      `;
+    }
+
+    function setListMessage(message) {
+      document.getElementById("studentListContainer").innerHTML = `
+        <div class="text-center py-12 text-gray-500 text-xs">${message}</div>
       `;
     }
 
@@ -1070,6 +1307,7 @@
       startCameraStream();
     }
 
+    // Captures canvas frame blob based on source tab context
     function takeSnapshot() {
       const video = document.getElementById("cameraVideo");
       const canvas = document.getElementById("cameraCanvas");
