@@ -54,7 +54,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
 
-  <!-- Global Status & Loading Modal Overlay -->
+  <!-- Global Status & Loading Modal Overlay Card -->
   <div id="globalSpinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full flex flex-col items-center text-center space-y-4 border border-gray-100">
       
@@ -65,7 +65,7 @@
       </svg>
       
       <!-- Success Icon Graphic (Hidden by default) -->
-      <svg id="successIcon" class="h-12 w-12 text-green-500 hidden animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <svg id="successIcon" class="h-12 w-12 text-green-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
 
@@ -176,7 +176,7 @@
           <div class="flex flex-col">
             <h4 class="text-xs font-bold text-gray-600 mb-1">Caste wise</h4>
             <table class="min-w-full border-collapse border border-gray-300 text-xs">
-              <thead class="bg-gray-100">
+              <thead class="bg-gray-100 font-bold">
                 <tr>
                   <th class="border border-gray-300 px-3 py-1.5 text-left">Group</th>
                   <th class="border border-gray-300 px-3 py-1.5 text-center">M</th>
@@ -192,7 +192,7 @@
           <div class="flex flex-col">
             <h4 class="text-xs font-bold text-gray-600 mb-1">Category wise</h4>
             <table class="min-w-full border-collapse border border-gray-300 text-xs">
-              <thead class="bg-gray-100">
+              <thead class="bg-gray-100 border font-bold">
                 <tr>
                   <th class="border border-gray-300 px-3 py-1.5 text-left">Group</th>
                   <th class="border border-gray-300 px-3 py-1.5 text-center">M</th>
@@ -267,15 +267,15 @@
                   <input type="text" id="f_adm" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Name</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Name</label>
                   <input type="text" id="f_name" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Class and Division</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Class and Division</label>
                   <input type="text" id="f_class" required placeholder="e.g. 10-A" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Gender</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Gender</label>
                   <select id="f_gender" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                     <option value="">Select</option>
                     <option value="M">M</option>
@@ -284,51 +284,51 @@
                   </select>
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">DOB (dd/mm/yyyy)</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">DOB (dd/mm/yyyy)</label>
                   <input type="text" id="f_dob" required placeholder="DD/MM/YYYY" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Mobile</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Mobile</label>
                   <input type="tel" id="f_mobile" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Father's Name</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Father's Name</label>
                   <input type="text" id="f_father" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Mother's Name</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Mother's Name</label>
                   <input type="text" id="f_mother" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">House</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">House</label>
                   <input type="text" id="f_house" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Post Office</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Post Office</label>
                   <input type="text" id="f_po" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">PIN</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">PIN</label>
                   <input type="text" id="f_pin" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Medium</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Medium</label>
                   <input type="text" id="f_medium" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Religion</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Religion</label>
                   <input type="text" id="f_religion" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Caste</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Caste</label>
                   <input type="text" id="f_caste" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Category</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Category</label>
                   <input type="text" id="f_category" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">First Language</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">First Language</label>
                   <input type="text" id="f_lang" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
               </div>
@@ -401,7 +401,7 @@
     <div id="tabContent-4" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hidden space-y-4">
       <div class="border-b pb-4">
         <h2 class="text-xl font-semibold text-gray-900">Quick Photo Uploader</h2>
-        <p class="text-xs text-gray-500">Search and modify student profiles and photos structured sequentially by Class and Division levels.</p>
+        <p class="text-xs text-gray-500">Search and browse student photographs structured sequentially by Class and Division levels.</p>
       </div>
 
       <!-- Quick Search input -->
@@ -507,7 +507,7 @@
     <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-md flex flex-col">
       <div class="p-4 border-b flex justify-between items-center bg-gray-50">
         <h3 class="font-bold text-gray-900" id="quickModalTitle">Modify Profile & Photograph</h3>
-        <button type="button" onclick="closeQuickUploadModal()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">✕</button>
+        <button type="button" onclick="cancelQuickUpload()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">✕</button>
       </div>
       
       <div class="p-6 space-y-4">
@@ -545,7 +545,7 @@
       </div>
 
       <div class="p-4 flex gap-2 justify-end bg-gray-50 border-t">
-        <button type="button" onclick="closeQuickUploadModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-medium px-4 py-2 rounded transition">
+        <button type="button" onclick="cancelQuickUpload()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-medium px-4 py-2 rounded transition">
           Cancel
         </button>
         <button type="button" onclick="submitQuickPhoto()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded transition">
@@ -634,13 +634,14 @@
       return dateStr; // fallback
     }
 
-    // Helper: Show/Hide Global Spinner Overlay & Custom Success Messages
+    // Helper: Show/Hide Global Spinner Overlay & Custom Success/Error Messages
     function showSpinner(message = "Please wait...") {
       // Restore default spinner elements
       document.getElementById("spinnerIcon").classList.remove("hidden");
       document.getElementById("successIcon").classList.add("hidden");
+      document.getElementById("errorIcon").classList.add("hidden");
       document.getElementById("spinnerButtonWrapper").classList.add("hidden");
-      document.getElementById("spinnerTitle").innerText = "Processing Request";
+      document.getElementById("spinnerTitle").innerText = "Processing Backend Request";
       
       document.getElementById("spinnerMessage").innerText = message;
       document.getElementById("globalSpinner").classList.remove("hidden");
@@ -649,7 +650,23 @@
     function showSuccessMessage(title, message) {
       // Hide spinner & show green checkmark
       document.getElementById("spinnerIcon").classList.add("hidden");
+      document.getElementById("errorIcon").classList.add("hidden");
       document.getElementById("successIcon").classList.remove("hidden");
+      
+      // Update text details
+      document.getElementById("spinnerTitle").innerText = title;
+      document.getElementById("spinnerMessage").innerText = message;
+      
+      // Reveal the closing dialog button
+      document.getElementById("spinnerButtonWrapper").classList.remove("hidden");
+      document.getElementById("globalSpinner").classList.remove("hidden");
+    }
+
+    function showErrorMessage(title, message) {
+      // Hide spinner & show red warning icon
+      document.getElementById("spinnerIcon").classList.add("hidden");
+      document.getElementById("successIcon").classList.add("hidden");
+      document.getElementById("errorIcon").classList.remove("hidden");
       
       // Update text details
       document.getElementById("spinnerTitle").innerText = title;
@@ -699,8 +716,7 @@
         setListMessage("Failed to load records. Check connection setup.");
         console.error(err);
       } finally {
-        // Spinner is kept open optionally during showSuccessMessage, but dismiss loaders here safely
-        if (document.getElementById("successIcon").classList.contains("hidden")) {
+        if (document.getElementById("successIcon").classList.contains("hidden") && document.getElementById("errorIcon").classList.contains("hidden")) {
           hideSpinner();
         }
       }
@@ -753,12 +769,14 @@
         });
         const result = await response.json();
         if (result.status === "success") {
+          showSpinner("Refreshing configurations...");
           await fetchDatabase();
           showSuccessMessage("Deleted Assignment", result.message);
         } else {
-          alert(result.message);
+          showErrorMessage("Database Action Failed", result.message);
         }
       } catch (err) {
+        showErrorMessage("Communications Error", "Could not remove teacher row from online sheet.");
         console.error(err);
       }
     }
@@ -1485,10 +1503,22 @@
       document.getElementById("quickUploadModal").classList.remove("hidden");
     }
 
+    // Completely close and clean up Quick Upload Modal state parameters safely
     function closeQuickUploadModal() {
       document.getElementById("quickUploadModal").classList.add("hidden");
+    }
+
+    function resetQuickUploadState() {
       quickSelectedStudent = null;
       quickUploadBlob = null;
+      document.getElementById("qm_imgbbLabelInput").value = "";
+      document.getElementById("qm_ImgInput").value = "";
+      document.getElementById("qm_ImgPreview").src = "https://placehold.co/150";
+    }
+
+    function cancelQuickUpload() {
+      closeQuickUploadModal();
+      resetQuickUploadState();
     }
 
     function handleQmFileSelect(event) {
@@ -1512,6 +1542,9 @@
         return;
       }
 
+      // Immediately hide Quick Upload modal dialog box to prevent stuck overlaps
+      closeQuickUploadModal();
+
       showSpinner("Uploading student photo to ImgBB...");
       
       let finalImgUrl = quickSelectedStudent["IMG URL"] || "";
@@ -1530,8 +1563,8 @@
           if (resJson.success) {
             finalImgUrl = resJson.data.url;
           } else {
-            alert(`Image upload error: ${resJson.error.message}`);
-            hideSpinner();
+            showErrorMessage("Upload Failed", `Image upload error: ${resJson.error.message}`);
+            resetQuickUploadState();
             return;
           }
         }
@@ -1557,20 +1590,18 @@
         if (result.status === "success") {
           showSpinner("Refreshing student database...");
           await fetchDatabase();
-          closeQuickUploadModal();
-          // Trigger the beautiful Success overlay, replacing browser alerts
+          resetQuickUploadState();
+          
+          // Trigger the beautiful, native dismissable Success overlay, replacing browser alerts
           showSuccessMessage("Updates Complete", "Student photograph and labeling sync successful.");
         } else {
-          alert(`Database sync failed: ${result.message}`);
+          showErrorMessage("Database Sync Failed", result.message);
+          resetQuickUploadState();
         }
       } catch (err) {
-        alert("Failed to execute quick update. Verify parameters.");
+        showErrorMessage("Transaction Failed", "Failed to execute quick update. Verify parameters.");
         console.error(err);
-      } finally {
-        // Keep screen loader overlay active if displaying the Success message.
-        if (document.getElementById("successIcon").classList.contains("hidden")) {
-          hideSpinner();
-        }
+        resetQuickUploadState();
       }
     }
 
@@ -2127,19 +2158,15 @@
           selectStudent(payloadData["Admission Number"]);
           showSuccessMessage("Roster Saved", "Changes synced successfully with Google Sheets.");
         } else {
-          alert(`Error saving student record: ${result.message}`);
+          showErrorMessage("Database Action Failed", result.message);
         }
       } catch (err) {
-        alert("Failed to communicate with the sheet. Check setup.");
+        showErrorMessage("Communications Error", "Could not sync data values with online sheet.");
         console.error(err);
-      } finally {
-        if (document.getElementById("successIcon").classList.contains("hidden")) {
-          hideSpinner();
-        }
       }
     }
 
-    // Deletes current record
+    // Deletes student record
     async function deleteRecord() {
       if (!currentSelectedStudent) return;
       if (!confirm(`Are you sure you want to permanently delete records of ${currentSelectedStudent["Name"]}?`)) return;
@@ -2165,15 +2192,11 @@
           await fetchDatabase();
           showSuccessMessage("Record Deleted", "Student record successfully removed from registry.");
         } else {
-          alert(`Error deleting database record: ${result.message}`);
+          showErrorMessage("Database Action Failed", result.message);
         }
       } catch (err) {
-        alert("Operation failed. Validate web app integration configurations.");
+        showErrorMessage("Communications Error", "Could not execute deletion inside sheet.");
         console.error(err);
-      } finally {
-        if (document.getElementById("successIcon").classList.contains("hidden")) {
-          hideSpinner();
-        }
       }
     }
   </script>
