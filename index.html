@@ -56,7 +56,7 @@
 
   <!-- Global Status & Loading Modal Overlay Card -->
   <div id="globalSpinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full flex flex-col items-center text-center space-y-4 border border-gray-100 animate-fade-in">
+    <div class="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full flex flex-col items-center text-center space-y-4 border border-gray-100">
       
       <!-- Loader Spinner Graphic -->
       <svg id="spinnerIcon" class="animate-spin h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -65,7 +65,7 @@
       </svg>
       
       <!-- Success Icon Graphic (Hidden by default) -->
-      <svg id="successIcon" class="h-12 w-12 text-green-500 hidden animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <svg id="successIcon" class="h-12 w-12 text-green-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
 
@@ -75,7 +75,7 @@
       </svg>
       
       <div>
-        <h3 id="spinnerTitle" class="text-sm font-bold text-gray-900 tracking-wide">Processing Backend Request</h3>
+        <h3 id="spinnerTitle" class="text-sm font-bold text-gray-900 tracking-wide">Processing...</h3>
         <p id="spinnerMessage" class="text-xs text-gray-500 mt-1 leading-relaxed">Please wait...</p>
       </div>
 
@@ -127,6 +127,22 @@
           <!-- Dynamic class tables render here -->
         </div>
         <div id="statDivisionConsolidation" class="border border-gray-300 p-4 rounded-lg bg-gray-50 flex justify-between items-center text-sm font-bold">
+          <!-- Consolidated Totals -->
+        </div>
+      </div>
+
+      <!-- Section 1.5: Medium-wise Breakdown with subtotals -->
+      <div class="space-y-4" id="statMediumWrapper">
+        <div class="flex justify-between items-center border-b pb-1">
+          <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">Medium-wise Breakdown</h3>
+          <button onclick="printSelectedSection('statMediumWrapper', 'Medium-wise Breakdown')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-3 py-1 rounded text-xs transition border">
+            🖨️ Print Section
+          </button>
+        </div>
+        <div id="statMediumContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Dynamic medium tables render here -->
+        </div>
+        <div id="statMediumConsolidation" class="border border-gray-300 p-4 rounded-lg bg-gray-50 flex justify-between items-center text-sm font-bold">
           <!-- Consolidated Totals -->
         </div>
       </div>
@@ -267,15 +283,15 @@
                   <input type="text" id="f_adm" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Name</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Name</label>
                   <input type="text" id="f_name" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Class and Division</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Class and Division</label>
                   <input type="text" id="f_class" required placeholder="e.g. 10-A" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Gender</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Gender</label>
                   <select id="f_gender" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                     <option value="">Select</option>
                     <option value="M">M</option>
@@ -284,52 +300,52 @@
                   </select>
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">DOB (dd/mm/yyyy)</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">DOB (dd/mm/yyyy)</label>
                   <input type="text" id="f_dob" required placeholder="DD/MM/YYYY" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Mobile</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Mobile</label>
                   <input type="tel" id="f_mobile" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Father's Name</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Father's Name</label>
                   <input type="text" id="f_father" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Mother's Name</label>
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Mother's Name</label>
                   <input type="text" id="f_mother" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">House</label>
-                  <input type="text" id="f_house" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">House</label>
+                  <input type="text" id="f_house" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Post Office</label>
-                  <input type="text" id="f_po" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Post Office</label>
+                  <input type="text" id="f_po" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">PIN</label>
-                  <input type="text" id="f_pin" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">PIN</label>
+                  <input type="text" id="f_pin" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Medium</label>
-                  <input type="text" id="f_medium" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_medium" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Religion</label>
-                  <input type="text" id="f_religion" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_religion" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Caste</label>
-                  <input type="text" id="f_caste" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_caste" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Category</label>
-                  <input type="text" id="f_category" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_category" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">First Language</label>
-                  <input type="text" id="f_lang" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_lang" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
               </div>
 
@@ -561,7 +577,7 @@
     // CONFIGURATION CONSTANTS (Hardcoded Integrations)
     // ----------------------------------------------------
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYgdUeBJsWDxZA9GApeuGwEsmsY9pL3tOd40T7ErRYtmn8do93WE7hcFq1uHWXtuZcjA/exec"; // Paste your GAS URL here
-    const IMGBB_API_KEY = "1032b8a5cf9568172cbc7caed6c58d69";                  // Paste your ImgBB Key here
+    const IMGBB_API_KEY = "1032b8a5cf9568172cbc7caed6c58d69";                      // Paste your ImgBB Key here
     // ----------------------------------------------------
 
     let studentsData = [];
@@ -634,14 +650,14 @@
       return dateStr; // fallback
     }
 
-    // Helper: Show/Hide Global Spinner Overlay & Custom Success/Error Messages
+    // Helper: Show/Hide Global Spinner Overlay & Custom Success Messages
     function showSpinner(message = "Please wait...") {
       // Restore default spinner elements
       document.getElementById("spinnerIcon").classList.remove("hidden");
       document.getElementById("successIcon").classList.add("hidden");
       document.getElementById("errorIcon").classList.add("hidden");
       document.getElementById("spinnerButtonWrapper").classList.add("hidden");
-      document.getElementById("spinnerTitle").innerText = "Processing...";
+      document.getElementById("spinnerTitle").innerText = "Processing Backend Request";
       
       document.getElementById("spinnerMessage").innerText = message;
       document.getElementById("globalSpinner").classList.remove("hidden");
@@ -722,7 +738,7 @@
       }
     }
 
-    // Render teacher records grid with interactive modify actions
+    // Render teacher records grid
     function renderTeacherRecordsTable() {
       const tbody = document.getElementById("teacherRecordsBody");
       if (!teachersData || teachersData.length === 0) {
@@ -785,6 +801,8 @@
     function calculateSchoolStatistics() {
       const divContainer = document.getElementById("statDivisionContainer");
       const divConsolidation = document.getElementById("statDivisionConsolidation");
+      const medContainer = document.getElementById("statMediumContainer");
+      const medConsolidation = document.getElementById("statMediumConsolidation");
       const langContainer = document.getElementById("statLanguageContainer");
       const langConsolidation = document.getElementById("statLanguageConsolidation");
       const rBody = document.getElementById("demoReligionBody");
@@ -796,6 +814,8 @@
         const noDataHTML = `<div class="col-span-3 text-center py-6 text-gray-400">No active student records found.</div>`;
         divContainer.innerHTML = noDataHTML;
         divConsolidation.innerHTML = "";
+        medContainer.innerHTML = noDataHTML;
+        medConsolidation.innerHTML = "";
         langContainer.innerHTML = noDataHTML;
         langConsolidation.innerHTML = "";
         rBody.innerHTML = `<tr><td colspan="4" class="text-center py-2 text-gray-400">-</td></tr>`;
@@ -899,6 +919,89 @@
       `;
 
       // --------------------------------------------------
+      // Table 1.5: Medium-wise Breakdown Logic (Same as Division Breakdown)
+      // --------------------------------------------------
+      const mediums = [...new Set(studentsData.map(s => s["Medium"]))].filter(Boolean);
+      mediums.sort();
+
+      let overallMedM = 0, overallMedF = 0, overallMedTotal = 0;
+      let medBlocksHTML = "";
+
+      mediums.forEach(med => {
+        const medStudents = studentsData.filter(s => s["Medium"] === med);
+        
+        // Group divisions taking this specific medium
+        const medDivisions = [...new Set(medStudents.map(s => s["Class and Division"]))].filter(Boolean);
+        medDivisions.sort((a,b) => {
+          const lvlA = getClassLevel(a);
+          const lvlB = getClassLevel(b);
+          if (lvlA !== lvlB) return lvlA - lvlB;
+          return a.localeCompare(b);
+        });
+
+        let subM = 0, subF = 0, subT = 0;
+
+        let rows = medDivisions.map(cls => {
+          const genderData = medStudents.filter(s => s["Class and Division"] === cls);
+          let mM = 0, mF = 0, mT = 0;
+          genderData.forEach(s => {
+            const gen = normalizeGender(s["Gender"]);
+            mT++;
+            if (gen === "M") { mM++; overallMedM++; }
+            else if (gen === "F") { mF++; overallMedF++; }
+            overallMedTotal++;
+          });
+
+          subM += mM; subF += mF; subT += mT;
+
+          return `
+            <tr>
+              <td class="border border-gray-300 px-3 py-1 font-semibold text-gray-900">${cls}</td>
+              <td class="border border-gray-300 px-3 py-1 text-center text-blue-600">${mM}</td>
+              <td class="border border-gray-300 px-3 py-1 text-center text-pink-600">${mF}</td>
+              <td class="border border-gray-300 px-3 py-1 text-right font-bold text-gray-900">${mT}</td>
+            </tr>
+          `;
+        }).join('');
+
+        medBlocksHTML += `
+          <div class="flex flex-col border border-gray-300 rounded-lg p-3 bg-white space-y-2">
+            <h4 class="text-xs font-extrabold text-blue-900 uppercase">Medium : ${med}</h4>
+            <table class="min-w-full border-collapse border border-gray-300 text-[11px] text-left">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border border-gray-300 px-2 py-1 font-semibold text-gray-700">Division</th>
+                  <th class="border border-gray-300 px-2 py-1 text-center font-semibold text-gray-700">M</th>
+                  <th class="border border-gray-300 px-2 py-1 text-center font-semibold text-gray-700">F</th>
+                  <th class="border border-gray-300 px-2 py-1 text-right font-semibold text-gray-700">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows}
+                <tr class="bg-blue-50/50 font-bold text-blue-900">
+                  <td class="border border-gray-300 px-2 py-1 uppercase">${med} Total</td>
+                  <td class="border border-gray-300 px-2 py-1 text-center">${subM}</td>
+                  <td class="border border-gray-300 px-2 py-1 text-center">${subF}</td>
+                  <td class="border border-gray-300 px-2 py-1 text-right">${subT}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      });
+
+      medContainer.innerHTML = medBlocksHTML;
+      medConsolidation.innerHTML = `
+        <span class="uppercase tracking-wider">Grand Total Consolidation</span>
+        <span class="flex gap-4">
+          <span>M: <strong class="text-blue-800">${overallMedM}</strong></span>
+          <span>F: <strong class="text-pink-800">${overallMedF}</strong></span>
+          <span>Total: <strong class="text-gray-900">${overallMedTotal}</strong></span>
+        </span>
+      `;
+
+
+      // --------------------------------------------------
       // Table 2: First Language Statistics (ARABIC, MAL, SKT subheaded blocks)
       // --------------------------------------------------
       const langClassMap = {};
@@ -964,7 +1067,7 @@
 
         return `
           <div class="flex flex-col border border-gray-300 rounded-lg p-3 bg-white space-y-2">
-            <h4 class="text-xs font-extrabold text-emerald-950 uppercase">Sub Head : ${langName}</h4>
+            <h4 class="text-xs font-extrabold text-emerald-950 uppercase"> ${langName}</h4>
             <table class="min-w-full border-collapse border border-gray-300 text-[11px] text-left">
               <thead class="bg-gray-100">
                 <tr>
@@ -1136,7 +1239,7 @@
       catBody.innerHTML = catHTML;
 
       // --------------------------------------------------
-      // Section 4: Class-wise Demographic Breakdown Summary (Decoupled Tables with Group / Sl subtotals)
+      // Section 4: Class-wise Demographic Breakdown Summary (Decoupled Tables)
       // --------------------------------------------------
       let classWiseHTML = "";
 
@@ -1148,11 +1251,19 @@
         const clsReligion = {};
         const clsCaste = {};
         const clsCategory = {};
+        const clsMedium = {};
 
         clsStudents.forEach(s => {
           const gender = normalizeGender(s["Gender"]);
           if (gender === "M") clsM++;
           else if (gender === "F") clsF++;
+
+          // Medium mapping
+          const med = s["Medium"] ? s["Medium"].toString().trim() : "Not Specified";
+          if (!clsMedium[med]) clsMedium[med] = { m:0, f:0, t:0 };
+          clsMedium[med].t++;
+          if (gender === "M") clsMedium[med].m++;
+          else if (gender === "F") clsMedium[med].f++;
 
           // Languages mapping
           let rawLang = (s["First Language"] || "").toString().trim().toUpperCase();
@@ -1189,7 +1300,7 @@
           else if (gender === "F") clsCategory[cat].f++;
         });
 
-        // Helper sub-table renderer for class-by-class demographics with header "Group" | M | F | Total & custom subtotal rows
+        // Helper sub-table renderer for class-by-class demographics with header "Group" | M | F | Total
         function buildClassStatSubTable(title, objectData) {
           let rows = Object.keys(objectData).sort().map(key => {
             const d = objectData[key];
@@ -1236,7 +1347,7 @@
         classWiseHTML += `
           <div id="classDemoCard-${cls}" class="flex flex-col border border-gray-300 rounded-lg p-3 sm:p-4 bg-white space-y-4 shadow-sm class-demographics-card animate-fade-in">
             <div class="flex justify-between items-center border-b pb-2">
-              <h4 class="text-xs sm:text-sm font-extrabold text-gray-900 uppercase">Sub Head : Class ${cls}</h4>
+              <h4 class="text-sm font-extrabold text-gray-900 uppercase"> Class ${cls}</h4>
               <div class="flex gap-1.5">
                 <button onclick="shareClassDemographicsWhatsApp('${cls}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2.5 py-1 rounded transition flex items-center gap-1">
                   💬 WhatsApp
@@ -1247,8 +1358,9 @@
               </div>
             </div>
             
-            <!-- Safe Responsive Multi-device layout structures. Collapses cleanly on mobile. -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Medium table (inserted first as requested) -->
+              ${buildClassStatSubTable("Medium", clsMedium)}
               <!-- First Language table -->
               ${buildClassStatSubTable("First Language", clsLanguages)}
               <!-- Religion table -->
@@ -1293,11 +1405,18 @@
       const clsReligion = {};
       const clsCaste = {};
       const clsCategory = {};
+      const clsMedium = {};
 
       clsStudents.forEach(s => {
         const gender = normalizeGender(s["Gender"]);
         if (gender === "M") clsM++;
         else if (gender === "F") clsF++;
+
+        const med = s["Medium"] ? s["Medium"].toString().trim() : "Not Specified";
+        if (!clsMedium[med]) clsMedium[med] = { m:0, f:0, t:0 };
+        clsMedium[med].t++;
+        if (gender === "M") clsMedium[med].m++;
+        else if (gender === "F") clsMedium[med].f++;
 
         let rawLang = (s["First Language"] || "").toString().trim().toUpperCase();
         let langKey = "";
@@ -1334,7 +1453,13 @@
       report += `*Class Teacher:* ${teacherObj["Teacher Name"]}\n`;
       report += `==============================\n\n`;
 
-      report += `*FIRST LANGUAGE DISTRIBUTION*\n`;
+      report += `*MEDIUM DISTRIBUTION*\n`;
+      Object.keys(clsMedium).sort().forEach(med => {
+        const data = clsMedium[med];
+        report += `• ${med}: *${data.t}* (M: ${data.m} | F: ${data.f})\n`;
+      });
+
+      report += `\n*FIRST LANGUAGE DISTRIBUTION*\n`;
       Object.keys(clsLanguages).forEach(lang => {
         const data = clsLanguages[lang];
         report += `• ${lang}: *${data.t}* (M: ${data.m} | F: ${data.f})\n`;
@@ -1564,8 +1689,8 @@
           if (resJson.success) {
             finalImgUrl = resJson.data.url;
           } else {
-            showErrorMessage("Upload Failed", `Image upload error: ${resJson.error.message}`);
-            resetQuickUploadState();
+            alert(`Image upload error: ${resJson.error.message}`);
+            hideSpinner();
             return;
           }
         }
