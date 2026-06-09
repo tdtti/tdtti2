@@ -64,12 +64,12 @@
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
       
-      <!-- Success Icon Graphic (Hidden by default) -->
+      <!-- Success Icon Graphic -->
       <svg id="successIcon" class="h-12 w-12 text-green-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
 
-      <!-- Error Warning Icon Graphic (Hidden by default) -->
+      <!-- Error Warning Icon Graphic -->
       <svg id="errorIcon" class="h-12 w-12 text-red-500 hidden animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
@@ -192,7 +192,7 @@
           <div class="flex flex-col overflow-x-auto max-w-full">
             <h4 class="text-xs font-bold text-gray-600 mb-1">Caste wise</h4>
             <table class="min-w-full border-collapse border border-gray-300 text-xs">
-              <thead class="bg-gray-100">
+              <thead class="bg-gray-100 font-bold">
                 <tr>
                   <th class="border border-gray-300 px-3 py-1.5 text-left">Group</th>
                   <th class="border border-gray-300 px-3 py-1.5 text-center">M</th>
@@ -208,7 +208,7 @@
           <div class="flex flex-col overflow-x-auto max-w-full">
             <h4 class="text-xs font-bold text-gray-600 mb-1">Category wise</h4>
             <table class="min-w-full border-collapse border border-gray-300 text-xs">
-              <thead class="bg-gray-100">
+              <thead class="bg-gray-100 border font-bold">
                 <tr>
                   <th class="border border-gray-300 px-3 py-1.5 text-left">Group</th>
                   <th class="border border-gray-300 px-3 py-1.5 text-center">M</th>
@@ -284,15 +284,15 @@
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Name</label>
-                  <input type="text" id="f_name" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_name" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Class and Division</label>
-                  <input type="text" id="f_class" required placeholder="e.g. 10-A" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_class" required placeholder="e.g. 10-A" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Gender</label>
-                  <select id="f_gender" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <select id="f_gender" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                     <option value="">Select</option>
                     <option value="M">M</option>
                     <option value="F">F</option>
@@ -301,51 +301,51 @@
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">DOB (dd/mm/yyyy)</label>
-                  <input type="text" id="f_dob" required placeholder="DD/MM/YYYY" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_dob" required placeholder="DD/MM/YYYY" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Mobile</label>
-                  <input type="tel" id="f_mobile" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="tel" id="f_mobile" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Father's Name</label>
-                  <input type="text" id="f_father" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_father" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Mother's Name</label>
-                  <input type="text" id="f_mother" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                  <input type="text" id="f_mother" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">House</label>
-                  <input type="text" id="f_house" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <input type="text" id="f_house" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Post Office</label>
-                  <input type="text" id="f_po" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <input type="text" id="f_po" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">PIN</label>
-                  <input type="text" id="f_pin" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <input type="text" id="f_pin" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Medium</label>
-                  <input type="text" id="f_medium" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <input type="text" id="f_medium" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Religion</label>
-                  <input type="text" id="f_religion" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <input type="text" id="f_religion" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Caste</label>
-                  <input type="text" id="f_caste" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <input type="text" id="f_caste" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Category</label>
-                  <input type="text" id="f_category" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <input type="text" id="f_category" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">First Language</label>
-                  <input type="text" id="f_lang" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <input type="text" id="f_lang" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
                 </div>
               </div>
 
@@ -446,7 +446,7 @@
     </div>
 
     <!-- TAB 5 CONTENT: Teacher Configuration Management -->
-    <div id="tabContent-5" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hidden font-sans">
+    <div id="tabContent-5" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hidden">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <form id="teacherConfigForm" onsubmit="handleSaveTeacher(event)" class="space-y-4">
           <h3 class="font-bold text-gray-800 text-sm">Assign Class Teacher</h3>
@@ -471,7 +471,7 @@
           <h3 class="font-bold text-gray-600 text-xs uppercase tracking-wider mb-2">Assigned Class Teachers</h3>
           <div class="border rounded-lg overflow-hidden flex-1 overflow-y-auto max-h-72">
             <table class="min-w-full border-collapse border border-gray-300 text-xs text-left">
-              <thead class="bg-gray-50 font-bold">
+              <thead class="bg-gray-50">
                 <tr>
                   <th class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">Class & Div</th>
                   <th class="border border-gray-300 px-3 py-2 font-semibold text-gray-700">Teacher</th>
@@ -657,7 +657,7 @@
       document.getElementById("successIcon").classList.add("hidden");
       document.getElementById("errorIcon").classList.add("hidden");
       document.getElementById("spinnerButtonWrapper").classList.add("hidden");
-      document.getElementById("spinnerTitle").innerText = "Processing Backend Request";
+      document.getElementById("spinnerTitle").innerText = "Processing...";
       
       document.getElementById("spinnerMessage").innerText = message;
       document.getElementById("globalSpinner").classList.remove("hidden");
@@ -738,7 +738,7 @@
       }
     }
 
-    // Render teacher records grid
+    // Render teacher records grid with interactive modify actions
     function renderTeacherRecordsTable() {
       const tbody = document.getElementById("teacherRecordsBody");
       if (!teachersData || teachersData.length === 0) {
@@ -795,6 +795,13 @@
         showErrorMessage("Communications Error", "Could not remove teacher row from online sheet.");
         console.error(err);
       }
+    }
+
+    // Helper: Parse out numeric class levels safely
+    function getClassLevel(clsStr) {
+      if (!clsStr) return 999;
+      const match = clsStr.toString().match(/^(\d+)/);
+      return match ? parseInt(match[1], 10) : 999;
     }
 
     // Unified School Statistics Tables Populator (Subtotals & Demographics Streamlined)
@@ -1067,7 +1074,7 @@
 
         return `
           <div class="flex flex-col border border-gray-300 rounded-lg p-3 bg-white space-y-2">
-            <h4 class="text-xs font-extrabold text-emerald-950 uppercase"> ${langName}</h4>
+            <h4 class="text-xs font-extrabold text-emerald-950 uppercase">${langName}</h4>
             <table class="min-w-full border-collapse border border-gray-300 text-[11px] text-left">
               <thead class="bg-gray-100">
                 <tr>
@@ -1347,7 +1354,7 @@
         classWiseHTML += `
           <div id="classDemoCard-${cls}" class="flex flex-col border border-gray-300 rounded-lg p-3 sm:p-4 bg-white space-y-4 shadow-sm class-demographics-card animate-fade-in">
             <div class="flex justify-between items-center border-b pb-2">
-              <h4 class="text-sm font-extrabold text-gray-900 uppercase"> Class ${cls}</h4>
+              <h4 class="text-sm font-extrabold text-gray-900 uppercase">Class ${cls}</h4>
               <div class="flex gap-1.5">
                 <button onclick="shareClassDemographicsWhatsApp('${cls}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2.5 py-1 rounded transition flex items-center gap-1">
                   💬 WhatsApp
@@ -1358,6 +1365,7 @@
               </div>
             </div>
             
+            <!-- Safe Responsive Multi-device layout structures. Collapses cleanly on mobile. -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <!-- Medium table (inserted first as requested) -->
               ${buildClassStatSubTable("Medium", clsMedium)}
@@ -1576,7 +1584,7 @@
 
         return `
           <tr class="hover:bg-gray-50 border-b text-xs">
-            <td class="border border-gray-300 px-3 py-2 font-semibold text-gray-950">${student["Class and Division"] || "-"}</td>
+            <td class="border border-gray-300 px-3 py-2 font-semibold text-gray-955">${student["Class and Division"] || "-"}</td>
             <td class="border border-gray-300 px-3 py-2 font-mono">${student["Admission Number"]}</td>
             <td class="border border-gray-300 px-3 py-2 font-medium">${student["Name"]}</td>
             <td class="border border-gray-300 px-3 py-2 text-center">
@@ -1689,8 +1697,8 @@
           if (resJson.success) {
             finalImgUrl = resJson.data.url;
           } else {
-            alert(`Image upload error: ${resJson.error.message}`);
-            hideSpinner();
+            showErrorMessage("Upload Failed", `Image upload error: ${resJson.error.message}`);
+            resetQuickUploadState();
             return;
           }
         }
@@ -1789,6 +1797,130 @@
       document.getElementById("cameraModal").classList.add("hidden");
     }
 
+    // ----------------------------------------------------
+    // DYNAMIC LIVE SEARCH & FORM EDITOR (Tab 2)
+    // ----------------------------------------------------
+    function handleTypingSearch() {
+      const query = document.getElementById("searchInput").value.toLowerCase().trim();
+      const container = document.getElementById("studentListContainer");
+
+      if (!query) {
+        container.innerHTML = `<div class="text-center py-12 text-gray-400 text-xs">Begin typing to fetch matches...</div>`;
+        return;
+      }
+
+      const matches = studentsData.filter(student => {
+        const name = (student["Name"] || "").toString().toLowerCase();
+        const adm = (student["Admission Number"] || "").toString().toLowerCase();
+        return name.includes(query) || adm.includes(query);
+      });
+
+      if (matches.length === 0) {
+        container.innerHTML = `<div class="text-center py-12 text-gray-400 text-xs">No matching records found</div>`;
+        return;
+      }
+
+      container.innerHTML = matches.map(student => {
+        const photo = student["IMG URL"] || "https://placehold.co/100";
+        return `
+          <div onclick="selectStudent('${student['Admission Number']}')" class="flex items-center gap-3 p-2 border border-gray-200 rounded bg-white hover:bg-blue-50 cursor-pointer transition">
+            <img src="${photo}" class="w-8 h-8 object-cover rounded-full bg-gray-100 flex-shrink-0">
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-semibold text-gray-900 truncate">${student["Name"]}</h4>
+              <p class="text-[10px] text-gray-500">Adm: ${student["Admission Number"]} | Class: ${student["Class and Division"]}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectStudent(admNo) {
+      const student = studentsData.find(s => s["Admission Number"].toString() === admNo.toString());
+      if (!student) return;
+
+      currentSelectedStudent = student;
+      mode = 'view';
+      showStudentInForm(student);
+    }
+
+    function showStudentInForm(student) {
+      document.getElementById("viewPlaceholder").classList.add("hidden");
+      document.getElementById("formContainer").classList.remove("hidden");
+
+      document.getElementById("panelTitle").innerText = "View Student Record";
+      document.getElementById("btnEditMode").classList.remove("hidden");
+      document.getElementById("btnDelete").classList.remove("hidden");
+      document.getElementById("formActions").classList.add("hidden");
+
+      // Set input fields
+      document.getElementById("f_class").value = student["Class and Division"] || "";
+      document.getElementById("f_adm").value = student["Admission Number"] || "";
+      document.getElementById("f_name").value = student["Name"] || "";
+      document.getElementById("f_gender").value = normalizeGender(student["Gender"]);
+      document.getElementById("f_dob").value = formatDateToDMY(student["DOB"]) || "";
+      document.getElementById("f_father").value = student["Father"] || "";
+      document.getElementById("f_mother").value = student["Mother"] || "";
+      document.getElementById("f_mobile").value = student["Mobile"] || "";
+      document.getElementById("f_house").value = student["House"] || "";
+      document.getElementById("f_po").value = student["Post Office"] || "";
+      document.getElementById("f_pin").value = student["Pin"] || "";
+      document.getElementById("f_medium").value = student["Medium"] || "";
+      document.getElementById("f_religion").value = student["Religion"] || "";
+      document.getElementById("f_caste").value = student["Caste"] || "";
+      document.getElementById("f_category").value = student["Category"] || "";
+      document.getElementById("f_lang").value = student["First Language"] || "";
+      document.getElementById("formImgUrl").value = student["IMG URL"] || "";
+      
+      const imgPreview = student["IMG URL"] || "https://placehold.co/150";
+      document.getElementById("formImgPreview").src = imgPreview;
+
+      activeImageBlob = null; 
+      setFormFieldsDisabled(true);
+    }
+
+    function setFormFieldsDisabled(disabled) {
+      const fields = [
+        "f_class", "f_adm", "f_name", "f_gender", "f_dob", "f_father", "f_mother",
+        "f_mobile", "f_house", "f_po", "f_pin", "f_medium", "f_religion", "f_caste",
+        "f_category", "f_lang", "formImgInput"
+      ];
+      fields.forEach(id => {
+        document.getElementById(id).disabled = disabled;
+      });
+      document.getElementById("btnCameraOpen").disabled = disabled;
+    }
+
+    function showFormForAdd() {
+      mode = 'add';
+      currentSelectedStudent = null;
+      activeImageBlob = null;
+
+      document.getElementById("viewPlaceholder").classList.add("hidden");
+      document.getElementById("formContainer").classList.remove("hidden");
+
+      document.getElementById("panelTitle").innerText = "Add New Student";
+      document.getElementById("btnEditMode").classList.add("hidden");
+      document.getElementById("btnDelete").classList.add("hidden");
+      document.getElementById("formActions").classList.remove("hidden");
+
+      document.getElementById("studentForm").reset();
+      document.getElementById("formImgPreview").src = "https://placehold.co/150";
+      document.getElementById("formImgUrl").value = "";
+
+      setFormFieldsDisabled(false);
+    }
+
+    function enableEditMode() {
+      mode = 'edit';
+      activeImageBlob = null;
+      document.getElementById("panelTitle").innerText = "Edit Student Record";
+      document.getElementById("btnEditMode").classList.add("hidden");
+      document.getElementById("formActions").classList.remove("hidden");
+      
+      setFormFieldsDisabled(false);
+      document.getElementById("f_adm").disabled = true;
+    }
+
     function toggleCameraFacing() {
       preferredCameraFacing = (preferredCameraFacing === "user") ? "environment" : "user";
       startCameraStream();
@@ -1862,7 +1994,7 @@
       tbody.innerHTML = filtered.map((student, idx) => {
         const photo = student["IMG URL"] || "https://placehold.co/50";
         return `
-          <tr class="hover:bg-gray-50 border-b text-xs animate-fade-in">
+          <tr class="hover:bg-gray-50 border-b text-xs">
             <td class="px-4 py-2 font-bold text-gray-600">${idx + 1}</td>
             <td class="px-4 py-2"><img src="${photo}" class="w-8 h-8 object-cover rounded-full bg-gray-100 border text-[9px] text-center" alt="-"></td>
             <td class="px-4 py-2 font-medium">${student["Admission Number"]}</td>
@@ -2001,7 +2133,7 @@
         else if (gender === "F") religionMap[rel].f++;
 
         // Track Caste
-        const caste = s["Caste"] ? s["Caste"].trim() : "Not Specified";
+        const caste = s["Caste"] ? s["Caste"].toString().trim() : "Not Specified";
         if (!casteMap[caste]) casteMap[caste] = { m: 0, f: 0, total: 0 };
         casteMap[caste].total++;
         if (gender === "M") casteMap[caste].m++;
