@@ -7,13 +7,18 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Print Stylesheet for A4 Portrait with Page Breaks */
+    /* Print Stylesheet for A4 Portrait and Named Landscape with Page Breaks */
     @media print {
       @page {
         size: A4 portrait;
         margin: 15mm 10mm 15mm 10mm;
       }
       
+      @page landscape-page {
+        size: A4 landscape;
+        margin: 10mm 10mm 10mm 10mm;
+      }
+
       html, body {
         background-color: #ffffff !important;
         color: #000000 !important;
@@ -39,6 +44,11 @@
         justify-content: space-between;
         height: 260mm; 
         box-sizing: border-box;
+      }
+
+      .print-landscape {
+        page: landscape-page;
+        height: 180mm !important;
       }
 
       tr {
@@ -112,10 +122,10 @@
       <button onclick="switchTab(5)" id="tabBtn-5" title="Teacher Configurations" class="flex-1 py-3 text-xl md:text-2xl text-center rounded-lg transition-all focus:outline-none text-gray-500 hover:bg-gray-100">⚙️</button>
     </nav>
 
-    <!-- TAB 1 CONTENT: School Statistics Summary Tables (Streamlined & Simple Layout) -->
+    <!-- TAB 1 CONTENT: School Statistics Summary Tables -->
     <div id="tabContent-1" class="bg-white p-4 md:p-6 rounded-lg shadow-sm border border-gray-200 hidden space-y-8">
       
-      <!-- Section 1: Division-wise Breakdown with subtotals -->
+      <!-- Section 1: Division-wise Breakdown -->
       <div class="space-y-4" id="statDivisionWrapper">
         <div class="flex justify-between items-center border-b pb-1">
           <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">Division-wise Breakdown</h3>
@@ -123,15 +133,11 @@
             🖨️ Print Section
           </button>
         </div>
-        <div id="statDivisionContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Dynamic class tables render here -->
-        </div>
-        <div id="statDivisionConsolidation" class="border border-gray-300 p-4 rounded-lg bg-gray-50 flex justify-between items-center text-sm font-bold">
-          <!-- Consolidated Totals -->
-        </div>
+        <div id="statDivisionContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        <div id="statDivisionConsolidation" class="border border-gray-300 p-4 rounded-lg bg-gray-50 flex justify-between items-center text-sm font-bold"></div>
       </div>
 
-      <!-- Section 1.5: Medium-wise Breakdown with subtotals -->
+      <!-- Section 1.5: Medium-wise Breakdown -->
       <div class="space-y-4" id="statMediumWrapper">
         <div class="flex justify-between items-center border-b pb-1">
           <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">Medium-wise Breakdown</h3>
@@ -139,12 +145,8 @@
             🖨️ Print Section
           </button>
         </div>
-        <div id="statMediumContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Dynamic medium tables render here -->
-        </div>
-        <div id="statMediumConsolidation" class="border border-gray-300 p-4 rounded-lg bg-gray-50 flex justify-between items-center text-sm font-bold">
-          <!-- Consolidated Totals -->
-        </div>
+        <div id="statMediumContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        <div id="statMediumConsolidation" class="border border-gray-300 p-4 rounded-lg bg-gray-50 flex justify-between items-center text-sm font-bold"></div>
       </div>
 
       <!-- Section 2: First Language Statistics -->
@@ -155,12 +157,8 @@
             🖨️ Print Section
           </button>
         </div>
-        <div id="statLanguageContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Dynamic language tables render here -->
-        </div>
-        <div id="statLanguageConsolidation" class="border border-gray-300 p-4 rounded-lg bg-emerald-50 text-emerald-900 flex justify-between items-center text-sm font-bold">
-          <!-- Language Grand Totals -->
-        </div>
+        <div id="statLanguageContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        <div id="statLanguageConsolidation" class="border border-gray-300 p-4 rounded-lg bg-emerald-50 text-emerald-900 flex justify-between items-center text-sm font-bold"></div>
       </div>
 
       <!-- Section 3: Demographic Distribution Summary -->
@@ -188,7 +186,7 @@
             </table>
           </div>
 
-          <!-- Caste Table (Grouped dynamically by prefixes C-, H-, I-) -->
+          <!-- Caste Table -->
           <div class="flex flex-col overflow-x-auto max-w-full">
             <h4 class="text-xs font-bold text-gray-600 mb-1">Caste wise</h4>
             <table class="min-w-full border-collapse border border-gray-300 text-xs">
@@ -225,16 +223,15 @@
       <!-- Section 4: Class-wise Demographic Distribution Summary -->
       <div class="pt-6 border-t border-gray-100 space-y-4">
         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Class-wise Demographic Distribution Summary</h3>
-        <div id="classWiseDemographicsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Programmatically rendered tables populating here -->
-        </div>
+        <div id="classWiseDemographicsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
       </div>
     </div>
 
     <!-- TAB 2 CONTENT: Search Directory & Form Editor -->
     <div id="tabContent-2" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hidden">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Live search queries matches (Only renders when typing) -->
+        
+        <!-- Live search matches -->
         <div class="lg:col-span-5 flex flex-col h-[650px] border-r border-gray-100 pr-0 lg:pr-6">
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-1">Search Student Name or Adm No</label>
@@ -279,20 +276,20 @@
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label class="block text-xs font-semibold text-gray-505 uppercase mb-1">Admission Number</label>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Admission Number</label>
                   <input type="text" id="f_adm" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Name</label>
-                  <input type="text" id="f_name" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Name</label>
+                  <input type="text" id="f_name" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Class and Division</label>
-                  <input type="text" id="f_class" required placeholder="e.g. 10-A" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-505 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Class and Division</label>
+                  <input type="text" id="f_class" required placeholder="e.g. 10-A" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Gender</label>
-                  <select id="f_gender" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Gender</label>
+                  <select id="f_gender" required class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                     <option value="">Select</option>
                     <option value="M">M</option>
                     <option value="F">F</option>
@@ -300,52 +297,73 @@
                   </select>
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">DOB (dd/mm/yyyy)</label>
-                  <input type="text" id="f_dob" required placeholder="DD/MM/YYYY" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">DOB (dd/mm/yyyy)</label>
+                  <input type="text" id="f_dob" required placeholder="DD/MM/YYYY" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Mobile</label>
-                  <input type="tel" id="f_mobile" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Mobile</label>
+                  <input type="tel" id="f_mobile" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Father's Name</label>
-                  <input type="text" id="f_father" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Father's Name</label>
+                  <input type="text" id="f_father" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Mother's Name</label>
-                  <input type="text" id="f_mother" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Mother's Name</label>
+                  <input type="text" id="f_mother" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">House</label>
-                  <input type="text" id="f_house" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">House</label>
+                  <input type="text" id="f_house" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Post Office</label>
-                  <input type="text" id="f_po" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Post Office</label>
+                  <input type="text" id="f_po" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">PIN</label>
-                  <input type="text" id="f_pin" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">PIN</label>
+                  <input type="text" id="f_pin" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Medium</label>
-                  <input type="text" id="f_medium" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Medium</label>
+                  <input type="text" id="f_medium" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Religion</label>
-                  <input type="text" id="f_religion" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Religion</label>
+                  <input type="text" id="f_religion" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Caste</label>
-                  <input type="text" id="f_caste" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Caste</label>
+                  <input type="text" id="f_caste" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">Category</label>
-                  <input type="text" id="f_category" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Category</label>
+                  <input type="text" id="f_category" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-55 uppercase mb-1">First Language</label>
-                  <input type="text" id="f_lang" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-55 disabled:bg-gray-100">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">First Language</label>
+                  <input type="text" id="f_lang" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                
+                <!-- New Bank Fields -->
+                <div class="col-span-1 md:col-span-2 border-t pt-2 mt-2">
+                  <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Bank Account Details (Optional)</h4>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">A/C Number</label>
+                  <input type="text" id="f_ac" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Bank Name</label>
+                  <input type="text" id="f_bank" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Branch</label>
+                  <input type="text" id="f_branch" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">IFSC Code</label>
+                  <input type="text" id="f_ifsc" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
               </div>
 
@@ -383,24 +401,24 @@
         <table class="min-w-full text-[11px] text-left border-collapse border border-gray-300" id="classReportTable">
           <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider sticky top-0 cursor-pointer select-none">
             <tr>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('slNo')">Sl No ⇅</th>
+              <th class="border border-gray-300 px-3 py-2">Sl No</th>
               <th class="border border-gray-300 px-3 py-2">Photo</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Admission Number')">Adm No ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Name')">Name ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Class and Division')">Class & Div ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Gender')">Gender ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('DOB')">DOB ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Father')">Father ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Mother')">Mother ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Mobile')">Mobile ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('House')">House ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Post Office')">Post Office ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Pin')">PIN ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Medium')">Medium ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Religion')">Religion ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Caste')">Caste ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('Category')">Category ⇅</th>
-              <th class="border border-gray-300 px-3 py-2" onclick="handleTab3Sort('First Language')">Language ⇅</th>
+              <th class="border border-gray-300 px-3 py-2">Adm No</th>
+              <th class="border border-gray-300 px-3 py-2">Name</th>
+              <th class="border border-gray-300 px-3 py-2">Class & Div</th>
+              <th class="border border-gray-300 px-3 py-2">Gender</th>
+              <th class="border border-gray-300 px-3 py-2">DOB</th>
+              <th class="border border-gray-300 px-3 py-2">Father</th>
+              <th class="border border-gray-300 px-3 py-2">Mother</th>
+              <th class="border border-gray-300 px-3 py-2">Mobile</th>
+              <th class="border border-gray-300 px-3 py-2">House</th>
+              <th class="border border-gray-300 px-3 py-2">Post Office</th>
+              <th class="border border-gray-300 px-3 py-2">PIN</th>
+              <th class="border border-gray-300 px-3 py-2">Medium</th>
+              <th class="border border-gray-300 px-3 py-2">Religion</th>
+              <th class="border border-gray-300 px-3 py-2">Caste</th>
+              <th class="border border-gray-300 px-3 py-2">Category</th>
+              <th class="border border-gray-300 px-3 py-2">Language</th>
               <th class="border border-gray-300 px-3 py-2 text-center">Actions</th>
             </tr>
           </thead>
@@ -413,20 +431,18 @@
       </div>
     </div>
 
-    <!-- TAB 4 CONTENT: Quick Photo Uploader (Re-designed with Search Filterable Table) -->
+    <!-- TAB 4 CONTENT: Quick Photo Uploader -->
     <div id="tabContent-4" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hidden space-y-4">
       <div class="border-b pb-4">
         <h2 class="text-xl font-semibold text-gray-900">Quick Photo Uploader</h2>
         <p class="text-xs text-gray-500">Search and browse student photographs structured sequentially by Class and Division levels.</p>
       </div>
 
-      <!-- Quick Search input -->
       <div class="max-w-md">
         <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Search Student Name or Adm No</label>
         <input type="text" id="quickSearchInput" oninput="handleQuickSearch()" placeholder="Type to filter table roster..." class="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
       </div>
 
-      <!-- Class-ordered Grid Table -->
       <div class="overflow-x-auto border border-gray-200 rounded-lg max-h-[500px]">
         <table class="min-w-full text-xs text-left border-collapse border border-gray-300">
           <thead class="bg-gray-100 sticky top-0">
@@ -438,9 +454,7 @@
               <th class="border border-gray-300 px-3 py-2 text-center">Action</th>
             </tr>
           </thead>
-          <tbody id="quickUploadTableBody" class="bg-white divide-y divide-gray-200">
-            <!-- Dynamically populated roster -->
-          </tbody>
+          <tbody id="quickUploadTableBody" class="bg-white divide-y divide-gray-200"></tbody>
         </table>
       </div>
     </div>
@@ -518,7 +532,7 @@
     </div>
   </div>
 
-  <!-- Dedicated Quick Photo Update Overlay Dialog (Includes Editable Student Name Field) -->
+  <!-- Dedicated Quick Photo Update Overlay Dialog -->
   <div id="quickUploadModal" class="fixed inset-0 bg-black/80 z-50 hidden flex flex-col items-center justify-center p-4">
     <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-md flex flex-col">
       <div class="p-4 border-b flex justify-between items-center bg-gray-50">
@@ -527,7 +541,6 @@
       </div>
       
       <div class="p-6 space-y-4">
-        <!-- Selected Student Profile Details (Editable Name Component Included) -->
         <div class="bg-blue-50/50 p-4 rounded border border-blue-100 text-xs space-y-3">
           <div>
             <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Student Name</label>
@@ -535,7 +548,7 @@
           </div>
           <div>
             <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">ImgBB Image Label (Editable)</label>
-            <input type="text" id="qm_imgbbLabelInput" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 bg-white font-semibold text-gray-800 font-medium">
+            <input type="text" id="qm_imgbbLabelInput" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 bg-white font-semibold text-gray-800">
           </div>
           <div class="text-gray-700 space-y-1">
             <p>Admission No: <strong id="qm_adm" class="text-gray-950">-</strong></p>
@@ -543,7 +556,6 @@
           </div>
         </div>
 
-        <!-- Preview Canvas -->
         <div class="flex flex-col items-center gap-4 bg-gray-50 p-4 rounded-lg">
           <div class="w-32 h-32 bg-gray-200 rounded-md overflow-hidden border border-gray-300 flex items-center justify-center flex-shrink-0">
             <img id="qm_ImgPreview" src="https://placehold.co/150" alt="Quick Preview" class="object-cover w-full h-full">
@@ -576,8 +588,8 @@
     // ----------------------------------------------------
     // CONFIGURATION CONSTANTS (Hardcoded Integrations)
     // ----------------------------------------------------
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYgdUeBJsWDxZA9GApeuGwEsmsY9pL3tOd40T7ErRYtmn8do93WE7hcFq1uHWXtuZcjA/exec"; // Paste your GAS URL here
-    const IMGBB_API_KEY = "1032b8a5cf9568172cbc7caed6c58d69";                      // Paste your ImgBB Key here
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZyTEtMYO4WL1edU3AWn4iYrHSfpM6ICy1TWZGJuuVqiXUdeTlBrLFQiXq_auFJMbS7w/exec"; 
+    const IMGBB_API_KEY = "1032b8a5cf9568172cbc7caed6c58d69";                     
     // ----------------------------------------------------
 
     let studentsData = [];
@@ -595,14 +607,9 @@
     let preferredCameraFacing = "user"; 
     let cameraContextTarget = "main"; 
 
-    // Tab 3 column sorting parameters
-    let tab3FilteredStudents = [];
-    let tab3SortCol = null;
-    let tab3SortAsc = true;
-
-    // Helper: Extract leading class digits safely (e.g., "5-A" -> 5, "10-B" -> 10)
+    // Helper: Extract leading class digits safely
     function getClassLevel(clsStr) {
-      if (!clsStr) return 999; // Fallback to push unformatted values to bottom
+      if (!clsStr) return 999; 
       const match = clsStr.toString().match(/^(\d+)/);
       return match ? parseInt(match[1], 10) : 999;
     }
@@ -623,7 +630,7 @@
       }
     }
 
-    // Helper: Standardize legacy input genders to clean M/F strings 
+    // Helper: Standardize input genders to clean M/F strings 
     function normalizeGender(genderStr) {
       if (!genderStr) return "-";
       const g = genderStr.toString().trim().toUpperCase();
@@ -632,7 +639,7 @@
       return genderStr; 
     }
 
-    // Helper: Safely Format Any Date Input to Strict dd/mm/yyyy format
+    // Helper: Format Any Date Input to Strict dd/mm/yyyy format
     function formatDateToDMY(dateInput) {
       if (!dateInput) return "-";
       const dateStr = dateInput.toString().trim();
@@ -652,48 +659,36 @@
       } catch (err) {
         console.error("Date formatting failed: ", err);
       }
-      return dateStr; // fallback
+      return dateStr; 
     }
 
     // Helper: Show/Hide Global Spinner Overlay & Custom Success Messages
     function showSpinner(message = "Please wait...") {
-      // Restore default spinner elements
       document.getElementById("spinnerIcon").classList.remove("hidden");
       document.getElementById("successIcon").classList.add("hidden");
       document.getElementById("errorIcon").classList.add("hidden");
       document.getElementById("spinnerButtonWrapper").classList.add("hidden");
       document.getElementById("spinnerTitle").innerText = "Processing...";
-      
       document.getElementById("spinnerMessage").innerText = message;
       document.getElementById("globalSpinner").classList.remove("hidden");
     }
 
     function showSuccessMessage(title, message) {
-      // Hide spinner & show green checkmark
       document.getElementById("spinnerIcon").classList.add("hidden");
       document.getElementById("errorIcon").classList.add("hidden");
       document.getElementById("successIcon").classList.remove("hidden");
-      
-      // Update text details
       document.getElementById("spinnerTitle").innerText = title;
       document.getElementById("spinnerMessage").innerText = message;
-      
-      // Reveal the closing dialog button
       document.getElementById("spinnerButtonWrapper").classList.remove("hidden");
       document.getElementById("globalSpinner").classList.remove("hidden");
     }
 
     function showErrorMessage(title, message) {
-      // Hide spinner & show red warning icon
       document.getElementById("spinnerIcon").classList.add("hidden");
       document.getElementById("successIcon").classList.add("hidden");
       document.getElementById("errorIcon").classList.remove("hidden");
-      
-      // Update text details
       document.getElementById("spinnerTitle").innerText = title;
       document.getElementById("spinnerMessage").innerText = message;
-      
-      // Reveal the closing dialog button
       document.getElementById("spinnerButtonWrapper").classList.remove("hidden");
       document.getElementById("globalSpinner").classList.remove("hidden");
     }
@@ -709,8 +704,7 @@
     // Read students and teacher directories from GAS
     async function fetchDatabase() {
       if (!SCRIPT_URL || SCRIPT_URL.includes("...")) {
-        setListMessage("⚠️ Set the Google Apps Script SCRIPT_URL inside the script tag.");
-        hideSpinner();
+        console.error("SCRIPT_URL is not set.");
         return;
       }
 
@@ -727,19 +721,146 @@
           teachersData = result.teachers || [];
           
           populateClassSelector(); 
-          calculateSchoolStatistics(); // Refresh school-wide stats tables
-          renderTeacherRecordsTable(); // Refresh teacher listings
-          renderQuickUploadTable();    // Initialize Tab 4 static grid list
+          calculateSchoolStatistics(); 
+          renderTeacherRecordsTable(); 
+          renderQuickUploadTable();    
         } else {
-          setListMessage(`Error: ${result.message}`);
+          console.error(`Error: ${result.message}`);
         }
       } catch (err) {
-        setListMessage("Failed to load records. Check connection setup.");
-        console.error(err);
+        console.error("Failed to load records. Check connection setup.", err);
       } finally {
         if (document.getElementById("successIcon").classList.contains("hidden") && document.getElementById("errorIcon").classList.contains("hidden")) {
           hideSpinner();
         }
+      }
+    }
+
+    // ----------------------------------------------------
+    // TAB 2 SEARCH LOGIC & WORKSPACE IMPLEMENTATION
+    // ----------------------------------------------------
+    function handleTypingSearch() {
+      const query = document.getElementById("searchInput").value.toLowerCase().trim();
+      const container = document.getElementById("studentListContainer");
+      
+      if (!query) {
+        container.innerHTML = '<div class="text-center py-12 text-gray-400 text-xs">Begin typing to fetch matches...</div>';
+        return;
+      }
+
+      const matches = studentsData.filter(s => {
+        const name = (s["Name"] || "").toString().toLowerCase();
+        const adm = (s["Admission Number"] || "").toString().toLowerCase();
+        return name.includes(query) || adm.includes(query);
+      });
+
+      if (matches.length === 0) {
+        container.innerHTML = '<div class="text-center py-12 text-gray-400 text-xs">No matching students found.</div>';
+        return;
+      }
+
+      container.innerHTML = matches.map(s => `
+        <button type="button" onclick="selectStudent('${s["Admission Number"]}')" class="w-full text-left p-3 hover:bg-blue-50 rounded-lg border border-gray-100 transition text-xs flex flex-col gap-1 bg-white shadow-sm">
+          <span class="font-bold text-gray-900">${s["Name"]}</span>
+          <span class="text-gray-500 font-mono text-[10px]">Adm No: ${s["Admission Number"]} | Class: ${s["Class and Division"] || "-"}</span>
+        </button>
+      `).join('');
+    }
+
+    function selectStudent(admNo) {
+      const student = studentsData.find(s => s["Admission Number"].toString() === admNo.toString());
+      if (!student) return;
+
+      currentSelectedStudent = student;
+      mode = 'view';
+
+      document.getElementById("panelTitle").innerText = `Student Details: ${student["Name"]}`;
+      
+      // Basic Fields
+      document.getElementById("f_adm").value = student["Admission Number"] || "";
+      document.getElementById("f_name").value = student["Name"] || "";
+      document.getElementById("f_class").value = student["Class and Division"] || "";
+      document.getElementById("f_gender").value = normalizeGender(student["Gender"]);
+      document.getElementById("f_dob").value = formatDateToDMY(student["DOB"]);
+      document.getElementById("f_mobile").value = student["Mobile"] || "";
+      document.getElementById("f_father").value = student["Father"] || "";
+      document.getElementById("f_mother").value = student["Mother"] || "";
+      document.getElementById("f_house").value = student["House"] || "";
+      document.getElementById("f_po").value = student["Post Office"] || "";
+      document.getElementById("f_pin").value = student["Pin"] || "";
+      document.getElementById("f_medium").value = student["Medium"] || "";
+      document.getElementById("f_religion").value = student["Religion"] || "";
+      document.getElementById("f_caste").value = student["Caste"] || "";
+      document.getElementById("f_category").value = student["Category"] || "";
+      document.getElementById("f_lang").value = student["First Language"] || "";
+      document.getElementById("formImgUrl").value = student["IMG URL"] || "";
+
+      // Bank Fields
+      document.getElementById("f_ac").value = student["A/C No"] || "";
+      document.getElementById("f_bank").value = student["Bank"] || "";
+      document.getElementById("f_branch").value = student["Branch"] || "";
+      document.getElementById("f_ifsc").value = student["IFSC Code"] || "";
+
+      document.getElementById("formImgPreview").src = student["IMG URL"] || "https://placehold.co/150";
+
+      // Toggle Input Fields to read-only initially
+      toggleFormInputs(true);
+
+      document.getElementById("viewPlaceholder").classList.add("hidden");
+      document.getElementById("formContainer").classList.remove("hidden");
+      document.getElementById("formActions").classList.add("hidden");
+    }
+
+    function toggleFormInputs(disabled) {
+      const form = document.getElementById("studentForm");
+      const inputs = form.querySelectorAll("input, select");
+      inputs.forEach(input => {
+        if (input.id !== "searchInput" && input.id !== "formImgInput") {
+          input.disabled = disabled;
+        }
+      });
+    }
+
+    function enableEditMode() {
+      mode = 'edit';
+      toggleFormInputs(false);
+      document.getElementById("formActions").classList.remove("hidden");
+    }
+
+    function resetToView() {
+      if (currentSelectedStudent) {
+        selectStudent(currentSelectedStudent["Admission Number"]);
+      } else {
+        document.getElementById("formContainer").classList.add("hidden");
+        document.getElementById("viewPlaceholder").classList.remove("hidden");
+      }
+    }
+
+    function showFormForAdd() {
+      currentSelectedStudent = null;
+      mode = 'add';
+
+      document.getElementById("panelTitle").innerText = "Add New Student Record";
+      document.getElementById("studentForm").reset();
+      document.getElementById("formImgPreview").src = "https://placehold.co/150";
+      document.getElementById("formImgUrl").value = "";
+      activeImageBlob = null;
+
+      toggleFormInputs(false);
+      document.getElementById("viewPlaceholder").classList.add("hidden");
+      document.getElementById("formContainer").classList.remove("hidden");
+      document.getElementById("formActions").classList.remove("hidden");
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        activeImageBlob = file;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById("formImgPreview").src = e.target.result;
+        }
+        reader.readAsDataURL(file);
       }
     }
 
@@ -756,7 +877,7 @@
           <td class="border border-gray-300 px-3 py-1.5 font-semibold text-gray-900">${t["Class and Division"]}</td>
           <td class="border border-gray-300 px-3 py-1.5 font-medium">${t["Teacher Name"]}</td>
           <td class="border border-gray-300 px-3 py-1.5">${t["Mobile Number"]}</td>
-          <td class="border border-gray-300 px-3 py-1.5 text-center flex gap-1 justify-center animate-fade-in">
+          <td class="border border-gray-300 px-3 py-1.5 text-center flex gap-1 justify-center">
             <button onclick="editTeacherAssignment('${t["Class and Division"]}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 text-[10px] font-semibold px-2 py-0.5 rounded transition">Edit</button>
             <button onclick="removeTeacherAssignment('${t["Class and Division"]}')" class="bg-red-50 text-red-600 hover:bg-red-100 text-[10px] font-semibold px-2 py-0.5 rounded transition">Remove</button>
           </td>
@@ -764,7 +885,6 @@
       `).join('');
     }
 
-    // Populate assignment form values for modification
     function editTeacherAssignment(cls) {
       const match = teachersData.find(t => (t["Class and Division"] || "").toString().trim() === cls.toString().trim());
       if (match) {
@@ -775,7 +895,6 @@
       }
     }
 
-    // Delete teacher assignment row from database
     async function removeTeacherAssignment(cls) {
       if (!confirm(`Are you sure you want to delete teacher assignment for class ${cls}?`)) return;
 
@@ -802,7 +921,7 @@
       }
     }
 
-    // Unified School Statistics Tables Populator (Subtotals & Demographics Streamlined)
+    // Unified School Statistics Tables Populator (Subtotals & Demographics)
     function calculateSchoolStatistics() {
       const divContainer = document.getElementById("statDivisionContainer");
       const divConsolidation = document.getElementById("statDivisionConsolidation");
@@ -838,9 +957,7 @@
         return a.localeCompare(b);
       });
 
-      // --------------------------------------------------
-      // Table 1: Division-wise Breakdown (Subheaded Class 5, 6, 7 Tables)
-      // --------------------------------------------------
+      // Table 1: Division-wise Breakdown
       let overallM = 0, overallF = 0, overallTotal = 0;
       let classGroups = { 5: [], 6: [], 7: [], "Others": [] };
 
@@ -854,7 +971,6 @@
 
       let divBlocksHTML = "";
 
-      // Helper to generate a single subhead table
       function buildClassSubTable(title, list, label) {
         if (list.length === 0) return "";
         let subM = 0, subF = 0, subT = 0;
@@ -923,9 +1039,7 @@
         </span>
       `;
 
-      // --------------------------------------------------
-      // Table 1.5: Medium-wise Breakdown Logic (Same as Division Breakdown)
-      // --------------------------------------------------
+      // Table 1.5: Medium-wise Breakdown
       const mediums = [...new Set(studentsData.map(s => s["Medium"]))].filter(Boolean);
       mediums.sort();
 
@@ -936,7 +1050,6 @@
         const medStudents = studentsData.filter(s => s["Medium"] === med);
         const medDivisions = [...new Set(medStudents.map(s => s["Class and Division"]))].filter(Boolean);
         
-        // Sort naturally
         medDivisions.sort((a,b) => {
           const lvlA = getClassLevel(a);
           const lvlB = getClassLevel(b);
@@ -1058,10 +1171,7 @@
         </span>
       `;
 
-
-      // --------------------------------------------------
-      // Table 2: First Language Statistics (ARABIC, MAL, SKT subheaded blocks)
-      // --------------------------------------------------
+      // Table 2: First Language Statistics
       const langClassMap = {};
       let grandLangM = 0, grandLangF = 0, grandLangTotal = 0;
 
@@ -1216,9 +1326,7 @@
         </span>
       `;
 
-      // --------------------------------------------------
-      // Table 3: Demographic Distribution Summary (Religion, Caste, Category Tables)
-      // --------------------------------------------------
+      // Table 3: Demographic Distribution Summary
       const religionMap = {};
       const casteMap = { "C-Group": {}, "H-Group": {}, "I-Group": {}, "Others": {} };
       const categoryMap = {};
@@ -1229,13 +1337,11 @@
         const rawCaste = student["Caste"] ? student["Caste"].toString().trim() : "Not Specified";
         const cat = student["Category"] ? student["Category"].toString().trim() : "Not Specified";
 
-        // Group religion
         if (!religionMap[rel]) religionMap[rel] = { m: 0, f: 0, total: 0 };
         religionMap[rel].total++;
         if (gender === "M") religionMap[rel].m++;
         else if (gender === "F") religionMap[rel].f++;
 
-        // Group caste dynamically by prefix (C-, H-, I-)
         let casteGroup = "Others";
         if (/^C-/i.test(rawCaste)) casteGroup = "C-Group";
         else if (/^H-/i.test(rawCaste)) casteGroup = "H-Group";
@@ -1248,14 +1354,12 @@
         if (gender === "M") casteMap[casteGroup][rawCaste].m++;
         else if (gender === "F") casteMap[casteGroup][rawCaste].f++;
 
-        // Group category
         if (!categoryMap[cat]) categoryMap[cat] = { m: 0, f: 0, total: 0 };
         categoryMap[cat].total++;
         if (gender === "M") categoryMap[cat].m++;
         else if (gender === "F") categoryMap[cat].f++;
       });
 
-      // Render Religion Table
       let relHTML = Object.keys(religionMap).sort().map(r => {
         const d = religionMap[r];
         return `
@@ -1277,14 +1381,12 @@
       `;
       rBody.innerHTML = relHTML;
 
-      // Render Caste Table (Sub-grouped dynamically by prefix)
       let casteHTML = "";
       Object.keys(casteMap).forEach(groupKey => {
         const groupData = casteMap[groupKey];
         const castesInGroup = Object.keys(groupData).sort();
         
         if (castesInGroup.length > 0) {
-          // Render a sub-heading row for the prefix group
           casteHTML += `
             <tr class="bg-purple-50 font-extrabold text-[10px] text-purple-950">
               <td class="border border-gray-300 px-2 py-1" colspan="4">${groupKey.toUpperCase()}</td>
@@ -1305,7 +1407,6 @@
             `;
           });
 
-          // Group Subtotal Row
           casteHTML += `
             <tr class="bg-purple-50/50 font-bold text-[10px] text-purple-900">
               <td class="border border-gray-300 px-3 py-1 uppercase pl-4">${groupKey} Subtotal</td>
@@ -1316,7 +1417,6 @@
           `;
         }
       });
-      // Global Roster Sum
       casteHTML += `
         <tr class="bg-gray-100 font-bold text-xs">
           <td class="border border-gray-300 px-2 py-1.5">Total</td>
@@ -1327,7 +1427,6 @@
       `;
       cBody.innerHTML = casteHTML;
 
-      // Render Category Table
       let catHTML = Object.keys(categoryMap).sort().map(c => {
         const d = categoryMap[c];
         return `
@@ -1349,9 +1448,7 @@
       `;
       catBody.innerHTML = catHTML;
 
-      // --------------------------------------------------
-      // Section 4: Class-wise Demographic Breakdown Summary (Decoupled Tables)
-      // --------------------------------------------------
+      // Section 4: Class-wise Demographic Breakdown Summary
       let classWiseHTML = "";
 
       divisions.forEach(cls => {
@@ -1369,14 +1466,12 @@
           if (gender === "M") clsM++;
           else if (gender === "F") clsF++;
 
-          // Medium mapping
           const med = s["Medium"] ? s["Medium"].toString().trim() : "Not Specified";
           if (!clsMedium[med]) clsMedium[med] = { m:0, f:0, t:0 };
           clsMedium[med].t++;
           if (gender === "M") clsMedium[med].m++;
           else if (gender === "F") clsMedium[med].f++;
 
-          // Languages mapping
           let rawLang = (s["First Language"] || "").toString().trim().toUpperCase();
           let langKey = "";
           if (rawLang.includes("ARABIC") || rawLang.startsWith("ARA")) langKey = "ARABIC";
@@ -1389,21 +1484,18 @@
             else if (gender === "F") clsLanguages[langKey].f++;
           }
 
-          // Religion mapping
           const r = s["Religion"] ? s["Religion"].toString().trim() : "Not Specified";
           if (!clsReligion[r]) clsReligion[r] = { m:0, f:0, t:0 };
           clsReligion[r].t++;
           if (gender === "M") clsReligion[r].m++;
           else if (gender === "F") clsReligion[r].f++;
 
-          // Caste mapping
           const c = s["Caste"] ? s["Caste"].toString().trim() : "Not Specified";
           if (!clsCaste[c]) clsCaste[c] = { m:0, f:0, t:0 };
           clsCaste[c].t++;
           if (gender === "M") clsCaste[c].m++;
           else if (gender === "F") clsCaste[c].f++;
 
-          // Category mapping
           const cat = s["Category"] ? s["Category"].toString().trim() : "Not Specified";
           if (!clsCategory[cat]) clsCategory[cat] = { m:0, f:0, t:0 };
           clsCategory[cat].t++;
@@ -1411,7 +1503,6 @@
           else if (gender === "F") clsCategory[cat].f++;
         });
 
-        // Helper sub-table renderer for class-by-class demographics with header "Group" | M | F | Total
         function buildClassStatSubTable(title, objectData) {
           let rows = Object.keys(objectData).sort().map(key => {
             const d = objectData[key];
@@ -1455,6 +1546,66 @@
           `;
         }
 
+        // Sort students of this division category-wise (Alphabetically by Category, then by Student Name)
+        const sortedByCategory = [...clsStudents].sort((a,b) => {
+          const catA = (a["Category"] || "").toString().trim().toUpperCase();
+          const catB = (b["Category"] || "").toString().trim().toUpperCase();
+          if (catA !== catB) return catA.localeCompare(catB);
+          
+          const nameA = (a["Name"] || "").toString().trim().toUpperCase();
+          const nameB = (b["Name"] || "").toString().trim().toUpperCase();
+          return nameA.localeCompare(nameB);
+        });
+
+        let categoryTableRows = sortedByCategory.map((s, idx) => `
+          <tr class="hover:bg-gray-50 border-b text-[9px]">
+            <td class="border border-gray-300 px-1.5 py-1 text-center font-bold">${idx + 1}</td>
+            <td class="border border-gray-300 px-1.5 py-1 font-mono">${s["Admission Number"]}</td>
+            <td class="border border-gray-300 px-1.5 py-1 font-bold text-gray-900">${s["Name"]}</td>
+            <td class="border border-gray-300 px-1.5 py-1 text-center">${normalizeGender(s["Gender"])}</td>
+            <td class="border border-gray-300 px-1.5 py-1 font-semibold text-indigo-900">${s["Category"] || "-"}</td>
+            <td class="border border-gray-300 px-1.5 py-1">${s["Caste"] || "-"}</td>
+            <td class="border border-gray-300 px-1.5 py-1">${s["Religion"] || "-"}</td>
+            <td class="border border-gray-300 px-1.5 py-1 font-mono text-[8px]">${s["A/C No"] || "-"}</td>
+            <td class="border border-gray-300 px-1.5 py-1 text-[8px]">${s["Bank"] || "-"}</td>
+            <td class="border border-gray-300 px-1.5 py-1 text-[8px]">${s["Branch"] || "-"}</td>
+            <td class="border border-gray-300 px-1.5 py-1 font-mono text-[8px]">${s["IFSC Code"] || "-"}</td>
+          </tr>
+        `).join('');
+
+        const categoryTableHTML = `
+          <div class="mt-4 pt-4 border-t border-gray-200 space-y-2 col-span-1 sm:col-span-2">
+            <div class="flex justify-between items-center">
+              <h5 class="text-[11px] font-extrabold text-indigo-950 uppercase tracking-wider">Category-wise Student Profile & Bank Details</h5>
+              <button onclick="printCategoryWiseTable('${cls}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1 rounded transition flex items-center gap-1">
+                🖨️ Print Landscape Roster
+              </button>
+            </div>
+            <div class="overflow-x-auto border border-gray-200 rounded">
+              <table class="min-w-full border-collapse border border-gray-300 text-[10px] text-left">
+                <thead class="bg-indigo-50 text-indigo-900">
+                  <tr>
+                    <th class="border border-gray-300 px-1.5 py-1 text-center">Sl No</th>
+                    <th class="border border-gray-300 px-1.5 py-1">Adm No</th>
+                    <th class="border border-gray-300 px-1.5 py-1">Student Name</th>
+                    <th class="border border-gray-300 px-1.5 py-1 text-center">Gen</th>
+                    <th class="border border-gray-300 px-1.5 py-1">Category</th>
+                    <th class="border border-gray-300 px-1.5 py-1">Caste</th>
+                    <th class="border border-gray-300 px-1.5 py-1">Religion</th>
+                    <th class="border border-gray-300 px-1.5 py-1">A/C No</th>
+                    <th class="border border-gray-300 px-1.5 py-1">Bank</th>
+                    <th class="border border-gray-300 px-1.5 py-1">Branch</th>
+                    <th class="border border-gray-300 px-1.5 py-1">IFSC</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white">
+                  ${categoryTableRows}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+
         classWiseHTML += `
           <div id="classDemoCard-${cls}" class="flex flex-col border border-gray-300 rounded-lg p-3 sm:p-4 bg-white space-y-4 shadow-sm class-demographics-card animate-fade-in">
             <div class="flex justify-between items-center border-b pb-2">
@@ -1464,28 +1615,26 @@
                   💬 WhatsApp
                 </button>
                 <button onclick="printClassDemographicsCard('${cls}')" class="bg-gray-800 hover:bg-gray-900 text-white text-[10px] font-bold px-2.5 py-1 rounded transition flex items-center gap-1">
-                  🖨️ Print
+                  🖨️ Print Summary
                 </button>
               </div>
             </div>
             
-            <!-- Safe Responsive Multi-device layout structures. Collapses cleanly on mobile. -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <!-- Medium table (inserted first as requested) -->
               ${buildClassStatSubTable("Medium", clsMedium)}
-              <!-- First Language table -->
               ${buildClassStatSubTable("First Language", clsLanguages)}
-              <!-- Religion table -->
               ${buildClassStatSubTable("Religion", clsReligion)}
-              <!-- Caste table -->
               ${buildClassStatSubTable("Caste", clsCaste)}
-              <!-- Category table -->
               ${buildClassStatSubTable("Category", clsCategory)}
-            </div>
+              
+              <!-- Total Strength Indicator Box -->
+              <div class="bg-gray-50 border border-gray-300 p-2 rounded text-[10px] font-extrabold flex justify-between items-center text-gray-950 col-span-1 sm:col-span-2">
+                <span>Total Class Strength</span>
+                <span>M: ${clsM} | F: ${clsF} | Total: ${clsTotal}</span>
+              </div>
 
-            <div class="bg-gray-50 border border-gray-300 p-2 rounded text-[10px] font-extrabold flex justify-between items-center text-gray-950">
-              <span>Total Class Strength</span>
-              <span>M: ${clsM} | F: ${clsF} | Total: ${clsTotal}</span>
+              <!-- New Category-wise Table (appended for each class) -->
+              ${categoryTableHTML}
             </div>
           </div>
         `;
@@ -1494,9 +1643,99 @@
       classWiseContainer.innerHTML = classWiseHTML;
     }
 
-    /**
-     * Dispatch Class-wise Demographic Distribution Summary to the Teacher's WhatsApp number
-     */
+    // Print Category Table uniquely on landscape layout configuration rules with breaks
+    function printCategoryWiseTable(cls) {
+      const clsStudents = studentsData.filter(s => s["Class and Division"] === cls);
+      if (clsStudents.length === 0) return;
+
+      const sortedByCategory = [...clsStudents].sort((a,b) => {
+        const catA = (a["Category"] || "").toString().trim().toUpperCase();
+        const catB = (b["Category"] || "").toString().trim().toUpperCase();
+        if (catA !== catB) return catA.localeCompare(catB);
+        
+        const nameA = (a["Name"] || "").toString().trim().toUpperCase();
+        const nameB = (b["Name"] || "").toString().trim().toUpperCase();
+        return nameA.localeCompare(nameB);
+      });
+
+      const printArea = document.getElementById("printArea");
+      printArea.innerHTML = ""; 
+      
+      const studentsPerPage = 15; 
+      const totalPages = Math.ceil(sortedByCategory.length / studentsPerPage);
+
+      for (let i = 0; i < totalPages; i++) {
+        const pageStudents = sortedByCategory.slice(i * studentsPerPage, (i + 1) * studentsPerPage);
+        const pageDiv = document.createElement("div");
+        pageDiv.className = "print-page print-landscape";
+        
+        let tableRowsHTML = pageStudents.map((s, idx) => {
+          const overallSlNo = (i * studentsPerPage) + idx + 1;
+          return `
+            <tr style="border-bottom: 1px solid #000;">
+              <td style="border: 1px solid #000; padding: 4px; text-align: center; font-weight: bold;">${overallSlNo}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-weight: bold; font-family: monospace;">${s["Admission Number"]}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-weight: bold;">${s["Name"]}</td>
+              <td style="border: 1px solid #000; padding: 4px; text-align: center;">${normalizeGender(s["Gender"])}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-weight: bold;">${s["Category"] || "-"}</td>
+              <td style="border: 1px solid #000; padding: 4px;">${s["Caste"] || "-"}</td>
+              <td style="border: 1px solid #000; padding: 4px;">${s["Religion"] || "-"}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-family: monospace;">${s["A/C No"] || "-"}</td>
+              <td style="border: 1px solid #000; padding: 4px;">${s["Bank"] || "-"}</td>
+              <td style="border: 1px solid #000; padding: 4px;">${s["Branch"] || "-"}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-family: monospace;">${s["IFSC Code"] || "-"}</td>
+            </tr>
+          `;
+        }).join('');
+
+        pageDiv.innerHTML = `
+          <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="border-bottom: 2px dashed #000; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="text-align: left;">
+                  <h1 style="font-size: 16px; font-weight: bold; margin: 0; text-transform: uppercase;">Category-wise Profile & Bank Registry</h1>
+                  <span style="font-size: 11px;">Class & Division: <strong>${cls}</strong></span>
+                </div>
+                <div style="text-align: right; font-size: 11px;">
+                  <span>Roster Strength: <strong>${sortedByCategory.length} Students</strong></span>
+                </div>
+              </div>
+
+              <table style="width: 100%; border-collapse: collapse; font-size: 9.5px; text-align: left;">
+                <thead>
+                  <tr style="background-color: #f3f4f6; border-bottom: 2px solid #000;">
+                    <th style="border: 1px solid #000; padding: 4px; text-align: center; width: 4%;">Sl No</th>
+                    <th style="border: 1px solid #000; padding: 4px; width: 8%;">Adm No</th>
+                    <th style="border: 1px solid #000; padding: 4px; width: 15%;">Student Name</th>
+                    <th style="border: 1px solid #000; padding: 4px; text-align: center; width: 4%;">Gen</th>
+                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Category</th>
+                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Caste</th>
+                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Religion</th>
+                    <th style="border: 1px solid #000; padding: 4px; width: 12%;">A/C No</th>
+                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Bank</th>
+                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Branch</th>
+                    <th style="border: 1px solid #000; padding: 4px; width: 7%;">IFSC</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRowsHTML}
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top: 15px; font-size: 10px; display: flex; justify-content: space-between; align-items: center; color: #333; padding-top: 5px; border-top: 1px solid #ddd;">
+              <span>Report Generated: ${new Date().toLocaleDateString()}</span>
+              <span style="font-weight: bold;">Page ${i + 1} of ${totalPages}</span>
+              <span>Verified By: ______________________</span>
+            </div>
+          </div>
+        `;
+        printArea.appendChild(pageDiv);
+      }
+
+      window.print();
+    }
+
     function shareClassDemographicsWhatsApp(clsName) {
       const clsStudents = studentsData.filter(s => s["Class and Division"] === clsName);
       if (clsStudents.length === 0) {
@@ -1504,7 +1743,6 @@
         return;
       }
 
-      // Check registered teacher mobile number
       const teacherObj = teachersData.find(t => t["Class and Division"].toString().trim() === clsName.toString().trim());
       if (!teacherObj) {
         alert(`No teacher registered for ${clsName}. Set registration configurations in tab 5 first.`);
@@ -1602,20 +1840,13 @@
       window.open(`https://api.whatsapp.com/send?phone=${targetPhone}&text=${encoded}`, '_blank');
     }
 
-    /**
-     * Prints a selected section content element independently on A4 Portrait
-     */
     function printSelectedSection(elementId, title) {
       const element = document.getElementById(elementId);
       if (!element) return;
-      
       const clone = element.cloneNode(true);
       executePrint(clone.innerHTML, title);
     }
 
-    /**
-     * Isolate and print a Class-wise Demographics card uniquely on A4 Portrait
-     */
     function printClassDemographicsCard(cls) {
       const card = document.getElementById(`classDemoCard-${cls}`).cloneNode(true);
       const actionHeader = card.querySelector(".flex.justify-between.items-center");
@@ -1625,27 +1856,19 @@
       executePrint(card.innerHTML, `Class ${cls} Demographic Summary`);
     }
 
-    /**
-     * Unified A4 Portrait hard-copy engine
-     */
     function executePrint(contentHTML, title) {
       const printArea = document.getElementById("printArea");
       printArea.innerHTML = `
         <div class="print-page" style="display: flex; flex-direction: column; justify-content: space-between; height: 260mm; box-sizing: border-box;">
           <div>
-            <!-- Header Block -->
             <div style="border-bottom: 2px dashed #000; padding-bottom: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
               <h1 style="font-size: 16px; font-weight: bold; margin: 0; text-transform: uppercase;">School Statistics Registry</h1>
               <span style="font-size: 11px; font-weight: bold;">${title}</span>
             </div>
-
-            <!-- Content Area -->
             <div class="print-body-content" style="font-size: 10px;">
               ${contentHTML}
             </div>
           </div>
-
-          <!-- Footer Block -->
           <div style="margin-top: 15px; font-size: 10px; display: flex; justify-content: space-between; align-items: center; color: #333; padding-top: 5px; border-top: 1px solid #ddd;">
             <span>Report Date: ${new Date().toLocaleDateString()}</span>
             <span>Authorized Signature: ______________________</span>
@@ -1653,16 +1876,12 @@
         </div>
       `;
 
-      // Hide active control forms/buttons inside print area if cloned in content
       const buttonsToHide = printArea.querySelectorAll("button, select, input");
       buttonsToHide.forEach(btn => btn.style.display = "none");
-
       window.print();
     }
 
-    // ----------------------------------------------------
-    // QUICK PHOTO UPLOADER
-    // ----------------------------------------------------
+    // Quick Photo Uploader Tab Rendering
     function renderQuickUploadTable(filteredList) {
       const tbody = document.getElementById("quickUploadTableBody");
       const listToRender = filteredList || studentsData;
@@ -1672,7 +1891,6 @@
         return;
       }
 
-      // Sort natural Class Division level sequence order
       const sorted = [...listToRender].sort((a, b) => {
         const lvlA = getClassLevel(a["Class and Division"]);
         const lvlB = getClassLevel(b["Class and Division"]);
@@ -1694,7 +1912,7 @@
             <td class="border border-gray-300 px-3 py-2 text-center">
               <img src="${photo}" class="w-8 h-8 object-cover rounded-full bg-gray-100 border inline-block">
             </td>
-            <td class="border border-gray-300 px-3 py-2 text-center col-span-2">
+            <td class="border border-gray-300 px-3 py-2 text-center">
               <button type="button" onclick="initiateQuickUpload('${student["Admission Number"]}')" class="text-white text-[10px] font-semibold px-2.5 py-1 rounded transition ${actionColor}">
                 ${actionLabel}
               </button>
@@ -1727,9 +1945,7 @@
       quickSelectedStudent = student;
       quickUploadBlob = null; 
 
-      // Populate Name as a non-editable text string label
       document.getElementById("qm_studentNameText").innerText = student["Name"] || "";
-      // Pre-fill editable image label field with student name by default
       document.getElementById("qm_imgbbLabelInput").value = student["Name"] || "";
       document.getElementById("qm_adm").innerText = student["Admission Number"] || "";
       document.getElementById("qm_class").innerText = student["Class and Division"] || "";
@@ -1741,7 +1957,6 @@
       document.getElementById("quickUploadModal").classList.remove("hidden");
     }
 
-    // Completely close and clean up Quick Upload Modal state parameters safely
     function closeQuickUploadModal() {
       document.getElementById("quickUploadModal").classList.add("hidden");
     }
@@ -1780,16 +1995,13 @@
         return;
       }
 
-      // Immediately hide Quick Upload modal dialog box to prevent stuck overlaps
       closeQuickUploadModal();
-
       showSpinner("Uploading student photo to ImgBB...");
       
       let finalImgUrl = quickSelectedStudent["IMG URL"] || "";
       try {
         if (quickUploadBlob) {
           const formData = new FormData();
-          // Send modifiedImgLabel as file name label parameter to ImgBB
           formData.append("image", quickUploadBlob, `${modifiedImgLabel}.jpg`);
 
           const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
@@ -1809,7 +2021,6 @@
 
         showSpinner("Syncing updates with database...");
         
-        // Push both the image URL and the customized filename label back to the student record
         const payload = {
           action: "update",
           data: {
@@ -1829,23 +2040,19 @@
           showSpinner("Refreshing student database...");
           await fetchDatabase();
           resetQuickUploadState();
-          
-          // Trigger the beautiful, native dismissable Success overlay, replacing browser alerts
           showSuccessMessage("Updates Complete", "Student photograph and labeling sync successful.");
         } else {
           showErrorMessage("Database Sync Failed", result.message);
           resetQuickUploadState();
         }
       } catch (err) {
-        showErrorMessage("Transaction Failed", "Failed to execute quick update. Verify parameters.");
+        showErrorMessage("Transaction Failed", "Failed to execute quick update.");
         console.error(err);
         resetQuickUploadState();
       }
     }
 
-    // ----------------------------------------------------
-    // SYSTEM CAMERA INTEGRATION
-    // ----------------------------------------------------
+    // Camera APIs
     async function openCameraModal(target = "main") {
       cameraContextTarget = target; 
       const modal = document.getElementById("cameraModal");
@@ -1884,7 +2091,6 @@
         video.srcObject = videoStream;
       } catch (err) {
         alert("Camera Access Denied or Unavailable.");
-        console.error(err);
         closeCameraModal();
       }
     }
@@ -1935,12 +2141,9 @@
       }, "image/jpeg", 0.9);
     }
 
-    // ----------------------------------------------------
-    // CLASS DIRECTORY UTILITIES (Tab 3)
-    // ----------------------------------------------------
+    // TAB 3 Class Report Populator
     function populateClassSelector() {
       const selector = document.getElementById("classDivSelector");
-      
       const classes = [...new Set(studentsData.map(s => s["Class and Division"]))].filter(Boolean);
       classes.sort();
 
@@ -1964,7 +2167,6 @@
         return;
       }
 
-      // Sort alphabetically by student name (A to Z) as requested
       filtered.sort((a, b) => {
         const nameA = (a["Name"] || "").toString().trim().toUpperCase();
         const nameB = (b["Name"] || "").toString().trim().toUpperCase();
@@ -1984,11 +2186,10 @@
             <td class="px-4 py-2">${formatDateToDMY(student["DOB"])}</td>
             <td class="px-4 py-2">${student["Father"] || "-"}</td>
             <td class="px-4 py-2">${student["Mother"] || "-"}</td>
-            <!-- Interactive Inline Mobile Number Editor for Tab 3 Roster Grid -->
             <td class="border border-gray-300 px-3 py-1.5">
               <div class="flex items-center gap-1">
                 <input type="tel" value="${student["Mobile"] || ""}" id="mobInput-${student["Admission Number"]}" class="border border-gray-300 rounded px-1.5 py-0.5 text-[10px] w-24 bg-white focus:outline-blue-500 font-medium text-gray-800">
-                <button onclick="saveStudentMobile('${student["Admission Number"]}')" title="Save Mobile Number" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-1 py-0.5 rounded text-[9px] font-semibold border border-blue-200">💾</button>
+                <button onclick="saveStudentMobile('${student["Admission Number"]}')" title="Save Mobile" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-1 py-0.5 rounded text-[9px] font-semibold border border-blue-200">💾</button>
               </div>
             </td>
             <td class="px-4 py-2">${student["House"] || "-"}</td>
@@ -2009,9 +2210,6 @@
       }).join('');
     }
 
-    /**
-     * Instantly write modified student mobile number updates directly back to Google Sheet
-     */
     async function saveStudentMobile(admNo) {
       const inputVal = document.getElementById(`mobInput-${admNo}`).value.trim();
       
@@ -2039,8 +2237,7 @@
           alert(`Sync error: ${result.message}`);
         }
       } catch (err) {
-        alert("Communication error during save. Verify parameters.");
-        console.error(err);
+        alert("Communication error during save.");
       } finally {
         if (document.getElementById("successIcon").classList.contains("hidden")) {
           hideSpinner();
@@ -2048,10 +2245,6 @@
       }
     }
 
-    /**
-     * Dispatch Simplified Selected Class Details directly to the registered Class Teacher's WhatsApp number
-     * Demographics: Religion, Caste, and Category-wise Breakdowns with M, F, and Total
-     */
     function shareClassToTeacher() {
       const selectedClass = document.getElementById("classDivSelector").value;
       if (!selectedClass) {
@@ -2065,7 +2258,6 @@
         return;
       }
 
-      // Check registered teacher mobile number
       const teacherObj = teachersData.find(t => t["Class and Division"].toString().trim() === selectedClass.toString().trim());
       if (!teacherObj) {
         alert(`No teacher registered for ${selectedClass}. Set registration configurations in tab 5 first.`);
@@ -2073,7 +2265,6 @@
       }
       const targetPhone = teacherObj["Mobile Number"].toString().replace(/[^0-9]/g, "");
 
-      // 1. Header Information
       let report = `*CLASS DIRECTORY ROSTER - ${selectedClass}*\n`;
       report += `*Class Teacher:* ${teacherObj["Teacher Name"]}\n`;
       report += `==============================\n\n`;
@@ -2081,18 +2272,15 @@
       let totalM = 0;
       let totalF = 0;
       const langCountMap = { "ARABIC": { total:0, m:0, f:0 }, "MAL": { total:0, m:0, f:0 }, "SKT": { total:0, m:0, f:0 } };
-      
       const religionMap = {};
       const casteMap = {};
       const categoryMap = {};
 
-      // 2. Tabulated Student Records (Strictly Sl No, Adm No, Name, Gender)
       filtered.forEach((s, idx) => {
         const gender = normalizeGender(s["Gender"]);
         if (gender === "M") totalM++;
         else if (gender === "F") totalF++;
 
-        // Track First Language totals (Only ARABIC, MAL, SKT as specified)
         const rawLang = s["First Language"] || "";
         let langKey = "";
         if (/arab/i.test(rawLang)) langKey = "ARABIC";
@@ -2105,21 +2293,18 @@
           else if (gender === "F") langCountMap[langKey].f++;
         }
 
-        // Track Religion
         const rel = s["Religion"] ? s["Religion"].trim() : "Not Specified";
         if (!religionMap[rel]) religionMap[rel] = { m: 0, f: 0, total: 0 };
         religionMap[rel].total++;
         if (gender === "M") religionMap[rel].m++;
         else if (gender === "F") religionMap[rel].f++;
 
-        // Track Caste
         const caste = s["Caste"] ? s["Caste"].toString().trim() : "Not Specified";
         if (!casteMap[caste]) casteMap[caste] = { m: 0, f: 0, total: 0 };
         casteMap[caste].total++;
         if (gender === "M") casteMap[caste].m++;
         else if (gender === "F") casteMap[caste].f++;
 
-        // Track Category
         const cat = s["Category"] ? s["Category"].toString().trim() : "Not Specified";
         if (!categoryMap[cat]) categoryMap[cat] = { m: 0, f: 0, total: 0 };
         categoryMap[cat].total++;
@@ -2135,28 +2320,24 @@
       report += `• *M:* ${totalM}\n`;
       report += `• *F:* ${totalF}\n\n`;
 
-      // 3. First Language Breakdown
       report += `*FIRST LANGUAGE DISTRIBUTION*\n`;
       Object.keys(langCountMap).sort().forEach(lang => {
         const data = langCountMap[lang];
         report += `• ${lang}: *${data.total}* (M: ${data.m} | F: ${data.f})\n`;
       });
 
-      // 4. Religion Breakdown
       report += `\n*RELIGION DISTRIBUTION*\n`;
       Object.keys(religionMap).sort().forEach(rel => {
         const data = religionMap[rel];
         report += `• ${rel}: *${data.total}* (M: ${data.m} | F: ${data.f})\n`;
       });
 
-      // 5. Caste Breakdown
       report += `\n*CASTE DISTRIBUTION*\n`;
       Object.keys(casteMap).sort().forEach(c => {
         const data = casteMap[c];
         report += `• ${c}: *${data.total}* (M: ${data.m} | F: ${data.f})\n`;
       });
 
-      // 6. Category Breakdown
       report += `\n*CATEGORY DISTRIBUTION*\n`;
       Object.keys(categoryMap).sort().forEach(cat => {
         const data = categoryMap[cat];
@@ -2167,10 +2348,6 @@
       window.open(`https://api.whatsapp.com/send?phone=${targetPhone}&text=${encoded}`, '_blank');
     }
 
-    /**
-     * Hard-copy Landscape Generation Engine
-     * Prints specific columns on Landscape A4 with Sl No pagination continuation
-     */
     function printClassReport() {
       const selectedClass = document.getElementById("classDivSelector").value;
       if (!selectedClass) {
@@ -2192,23 +2369,20 @@
 
       for (let i = 0; i < totalPages; i++) {
         const pageStudents = filtered.slice(i * studentsPerPage, (i + 1) * studentsPerPage);
-        
         const pageDiv = document.createElement("div");
-        pageDiv.className = "print-page";
+        pageDiv.className = "print-page print-landscape";
         
         let tableHTML = `
-          <!-- Header Area -->
           <div style="border-bottom: 2px dashed #000; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end;">
             <div style="text-align: left;">
               <h1 style="font-size: 18px; font-weight: bold; margin: 0; text-transform: uppercase;">Class Directory</h1>
-              <span style="font-size: 11px; color: #444;">Class and Division: <strong>${selectedClass}</strong></span>
+              <span style="font-size: 11px;">Class and Division: <strong>${selectedClass}</strong></span>
             </div>
-            <div style="text-align: right; font-size: 11px; color: #444;">
+            <div style="text-align: right; font-size: 11px;">
               <span>Total strength: <strong>${filtered.length} Students</strong></span>
             </div>
           </div>
 
-          <!-- 12-column Grid with sequential Sl No -->
           <table style="width: 100%; border-collapse: collapse; font-size: 9.5px; text-align: left;">
             <thead>
               <tr style="background-color: #f3f4f6; border-bottom: 2px solid #000;">
@@ -2232,7 +2406,7 @@
         pageStudents.forEach((s, idx) => {
           const photo = s["IMG URL"] || "https://placehold.co/50";
           const dmyDob = formatDateToDMY(s["DOB"]);
-          const overallSlNo = (i * studentsPerPage) + idx + 1; // Continuous numbering across page breaks
+          const overallSlNo = (i * studentsPerPage) + idx + 1;
 
           tableHTML += `
             <tr style="border-bottom: 1px solid #000;">
@@ -2258,7 +2432,6 @@
             </tbody>
           </table>
 
-          <!-- Footer Signature Area -->
           <div style="margin-top: 15px; font-size: 10px; display: flex; justify-content: space-between; align-items: center; color: #333; padding-top: 5px; border-top: 1px solid #ddd;">
             <span>Report Date: ${new Date().toLocaleDateString()}</span>
             <span style="font-weight: bold;">Page ${i + 1} of ${totalPages}</span>
@@ -2278,7 +2451,6 @@
       if (!student) return;
 
       const phone = student["Mobile"] ? student["Mobile"].toString().replace(/[^0-9]/g, "") : "";
-      
       const message = 
 `*STUDENT RECORD SUMMARY*
 ----------------------------------
@@ -2296,20 +2468,13 @@
 *Photo URL:* ${student["IMG URL"] || "None"}`;
 
       const encodedText = encodeURIComponent(message);
-      const waURL = `https://api.whatsapp.com/send?phone=${phone}&text=${encodedText}`;
-      window.open(waURL, '_blank');
+      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encodedText}`, '_blank');
     }
 
-    // ----------------------------------------------------
-    // PHOTO UPLOAD INFRASTRUCTURE
-    // ----------------------------------------------------
     async function uploadActivePhoto() {
-      if (!activeImageBlob) {
-        return null;
-      }
-
+      if (!activeImageBlob) return null;
       if (!IMGBB_API_KEY || IMGBB_API_KEY === "YOUR_IMGBB_API_KEY") {
-        alert("Cannot upload image: Missing ImgBB API key configuration.");
+        alert("Missing ImgBB API key configuration.");
         return null;
       }
 
@@ -2329,16 +2494,13 @@
           return null;
         }
       } catch (err) {
-        alert("Image upload interface failed. Verify network connectivity.");
-        console.error(err);
+        alert("Image upload interface failed.");
         return null;
       }
     }
 
-    // Creates or updates data
     async function handleSubmit(event) {
       event.preventDefault();
-      
       if (!SCRIPT_URL || SCRIPT_URL.includes("...")) {
         alert("Missing backend connection configuration.");
         return;
@@ -2376,7 +2538,13 @@
           "Caste": document.getElementById("f_caste").value,
           "Category": document.getElementById("f_category").value,
           "First Language": document.getElementById("f_lang").value,
-          "IMG URL": finalImgUrl
+          "IMG URL": finalImgUrl,
+          
+          // Bank fields mappings
+          "A/C No": document.getElementById("f_ac").value,
+          "Bank": document.getElementById("f_bank").value,
+          "Branch": document.getElementById("f_branch").value,
+          "IFSC Code": document.getElementById("f_ifsc").value
         };
 
         const payload = {
@@ -2404,7 +2572,6 @@
       }
     }
 
-    // Deletes student record
     async function deleteRecord() {
       if (!currentSelectedStudent) return;
       if (!confirm(`Are you sure you want to permanently delete records of ${currentSelectedStudent["Name"]}?`)) return;
@@ -2434,9 +2601,46 @@
         }
       } catch (err) {
         showErrorMessage("Communications Error", "Could not execute deletion inside sheet.");
-        console.error(err);
       }
     }
+
+    async function handleSaveTeacher(event) {
+      event.preventDefault();
+      showSpinner("Saving class teacher assignments...");
+      try {
+        const payload = {
+          action: "saveTeacher",
+          data: {
+            "Class and Division": document.getElementById("t_class").value,
+            "Teacher Name": document.getElementById("t_name").value,
+            "Mobile Number": document.getElementById("t_mobile").value
+          }
+        };
+
+        const response = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+
+        if (result.status === "success") {
+          showSpinner("Refreshing configuration lists...");
+          await fetchDatabase();
+          document.getElementById("teacherConfigForm").reset();
+          showSuccessMessage("Saved Configuration", "Teacher configuration successfully written.");
+        } else {
+          showErrorMessage("Action Failed", result.message);
+        }
+      } catch (err) {
+        showErrorMessage("Connection Error", "Failure communicating with central spreadsheet.");
+      }
+    }
+
+    // Initialize layout
+    window.onload = function() {
+      switchTab(1);
+      fetchDatabase();
+    };
   </script>
 </body>
 </html>
