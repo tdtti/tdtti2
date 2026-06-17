@@ -366,7 +366,14 @@
                   <input type="text" id="f_ifsc" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
                 </div>
               </div>
-
+                <div>
+  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">UID Number</label>
+  <input type="text" id="f_uid" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+</div>
+<div>
+  <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Remark</label>
+  <input type="text" id="f_remark" class="w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:outline-blue-500 disabled:bg-gray-100">
+</div>
               <div id="formActions" class="flex gap-2 justify-end pt-3 border-t mt-4 hidden">
                 <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-3 py-1.5 rounded text-xs transition" onclick="resetToView()">Cancel</button>
                 <button type="submit" id="btnSubmitForm" class="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1.5 rounded text-xs transition">Save Changes</button>
@@ -588,7 +595,7 @@
     // ----------------------------------------------------
     // CONFIGURATION CONSTANTS (Hardcoded Integrations)
     // ----------------------------------------------------
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZyTEtMYO4WL1edU3AWn4iYrHSfpM6ICy1TWZGJuuVqiXUdeTlBrLFQiXq_auFJMbS7w/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyW9E_DAVxg-vO8SE1BRzEZOikCkPdAjhCCrn2RVhqfSl_9n16I59ZfuVqERV9spQYYIg/exec"; 
     const IMGBB_API_KEY = "1032b8a5cf9568172cbc7caed6c58d69";                     
     // ----------------------------------------------------
 
@@ -800,6 +807,10 @@
       document.getElementById("f_bank").value = student["Bank"] || "";
       document.getElementById("f_branch").value = student["Branch"] || "";
       document.getElementById("f_ifsc").value = student["IFSC Code"] || "";
+
+      // Add these lines for UID and Remark
+document.getElementById("f_uid").value = student["UID"] || "";
+document.getElementById("f_remark").value = student["Remark"] || "";
 
       document.getElementById("formImgPreview").src = student["IMG URL"] || "https://placehold.co/150";
 
@@ -1558,20 +1569,22 @@
         });
 
         let categoryTableRows = sortedByCategory.map((s, idx) => `
-          <tr class="hover:bg-gray-50 border-b text-[9px]">
-            <td class="border border-gray-300 px-1.5 py-1 text-center font-bold">${idx + 1}</td>
-            <td class="border border-gray-300 px-1.5 py-1 font-mono">${s["Admission Number"]}</td>
-            <td class="border border-gray-300 px-1.5 py-1 font-bold text-gray-900">${s["Name"]}</td>
-            <td class="border border-gray-300 px-1.5 py-1 text-center">${normalizeGender(s["Gender"])}</td>
-            <td class="border border-gray-300 px-1.5 py-1 font-semibold text-indigo-900">${s["Category"] || "-"}</td>
-            <td class="border border-gray-300 px-1.5 py-1">${s["Caste"] || "-"}</td>
-            <td class="border border-gray-300 px-1.5 py-1">${s["Religion"] || "-"}</td>
-            <td class="border border-gray-300 px-1.5 py-1 font-mono text-[8px]">${s["A/C No"] || "-"}</td>
-            <td class="border border-gray-300 px-1.5 py-1 text-[8px]">${s["Bank"] || "-"}</td>
-            <td class="border border-gray-300 px-1.5 py-1 text-[8px]">${s["Branch"] || "-"}</td>
-            <td class="border border-gray-300 px-1.5 py-1 font-mono text-[8px]">${s["IFSC Code"] || "-"}</td>
-          </tr>
-        `).join('');
+  <tr class="hover:bg-gray-50 border-b text-[9px]">
+    <td class="border border-gray-300 px-1.5 py-1 text-center font-bold">${idx + 1}</td>
+    <td class="border border-gray-300 px-1.5 py-1 font-mono">${s["Admission Number"]}</td>
+    <td class="border border-gray-300 px-1.5 py-1 font-bold text-gray-900">${s["Name"]}</td>
+    <td class="border border-gray-300 px-1.5 py-1 text-center">${normalizeGender(s["Gender"])}</td>
+    <td class="border border-gray-300 px-1.5 py-1 font-mono text-[8px]">${s["UID"] || "-"}</td> <!-- Added UID -->
+    <td class="border border-gray-300 px-1.5 py-1 font-semibold text-indigo-900">${s["Category"] || "-"}</td>
+    <td class="border border-gray-300 px-1.5 py-1">${s["Caste"] || "-"}</td>
+    <td class="border border-gray-300 px-1.5 py-1">${s["Religion"] || "-"}</td>
+    <td class="border border-gray-300 px-1.5 py-1 font-mono text-[8px]">${s["A/C No"] || "-"}</td>
+    <td class="border border-gray-300 px-1.5 py-1 text-[8px]">${s["Bank"] || "-"}</td>
+    <td class="border border-gray-300 px-1.5 py-1 text-[8px]">${s["Branch"] || "-"}</td>
+    <td class="border border-gray-300 px-1.5 py-1 font-mono text-[8px]">${s["IFSC Code"] || "-"}</td>
+    <td class="border border-gray-300 px-1.5 py-1 text-[8px]">${s["Remark"] || "-"}</td> <!-- Added Remark -->
+  </tr>
+`).join('');
 
         const categoryTableHTML = `
   <div class="mt-4 pt-4 border-t border-gray-200 space-y-2 col-span-1 sm:col-span-2 category-bank-details-section">
@@ -1584,20 +1597,22 @@
             <div class="overflow-x-auto border border-gray-200 rounded">
               <table class="min-w-full border-collapse border border-gray-300 text-[10px] text-left">
                 <thead class="bg-indigo-50 text-indigo-900">
-                  <tr>
-                    <th class="border border-gray-300 px-1.5 py-1 text-center">Sl No</th>
-                    <th class="border border-gray-300 px-1.5 py-1">Adm No</th>
-                    <th class="border border-gray-300 px-1.5 py-1">Student Name</th>
-                    <th class="border border-gray-300 px-1.5 py-1 text-center">Gen</th>
-                    <th class="border border-gray-300 px-1.5 py-1">Category</th>
-                    <th class="border border-gray-300 px-1.5 py-1">Caste</th>
-                    <th class="border border-gray-300 px-1.5 py-1">Religion</th>
-                    <th class="border border-gray-300 px-1.5 py-1">A/C No</th>
-                    <th class="border border-gray-300 px-1.5 py-1">Bank</th>
-                    <th class="border border-gray-300 px-1.5 py-1">Branch</th>
-                    <th class="border border-gray-300 px-1.5 py-1">IFSC</th>
-                  </tr>
-                </thead>
+  <tr>
+    <th class="border border-gray-300 px-1.5 py-1 text-center">Sl No</th>
+    <th class="border border-gray-300 px-1.5 py-1">Adm No</th>
+    <th class="border border-gray-300 px-1.5 py-1">Student Name</th>
+    <th class="border border-gray-300 px-1.5 py-1 text-center">Gen</th>
+    <th class="border border-gray-300 px-1.5 py-1">UID</th> <!-- Added UID -->
+    <th class="border border-gray-300 px-1.5 py-1">Category</th>
+    <th class="border border-gray-300 px-1.5 py-1">Caste</th>
+    <th class="border border-gray-300 px-1.5 py-1">Religion</th>
+    <th class="border border-gray-300 px-1.5 py-1">A/C No</th>
+    <th class="border border-gray-300 px-1.5 py-1">Bank</th>
+    <th class="border border-gray-300 px-1.5 py-1">Branch</th>
+    <th class="border border-gray-300 px-1.5 py-1">IFSC</th>
+    <th class="border border-gray-300 px-1.5 py-1">Remark</th> <!-- Added Remark -->
+  </tr>
+</thead>
                 <tbody class="bg-white">
                   ${categoryTableRows}
                 </tbody>
@@ -1677,6 +1692,7 @@
               <td style="border: 1px solid #000; padding: 4px; font-weight: bold; font-family: monospace;">${s["Admission Number"]}</td>
               <td style="border: 1px solid #000; padding: 4px; font-weight: bold;">${s["Name"]}</td>
               <td style="border: 1px solid #000; padding: 4px; text-align: center;">${normalizeGender(s["Gender"])}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-family: monospace;">${s["UID"] || "-"}</td> <!-- Added UID -->
               <td style="border: 1px solid #000; padding: 4px; font-weight: bold;">${s["Category"] || "-"}</td>
               <td style="border: 1px solid #000; padding: 4px;">${s["Caste"] || "-"}</td>
               <td style="border: 1px solid #000; padding: 4px;">${s["Religion"] || "-"}</td>
@@ -1684,6 +1700,7 @@
               <td style="border: 1px solid #000; padding: 4px;">${s["Bank"] || "-"}</td>
               <td style="border: 1px solid #000; padding: 4px;">${s["Branch"] || "-"}</td>
               <td style="border: 1px solid #000; padding: 4px; font-family: monospace;">${s["IFSC Code"] || "-"}</td>
+              <td style="border: 1px solid #000; padding: 4px;">${s["Remark"] || "-"}</td> <!-- Added Remark -->
             </tr>
           `;
         }).join('');
@@ -1701,23 +1718,25 @@
                 </div>
               </div>
 
-              <table style="width: 100%; border-collapse: collapse; font-size: 9.5px; text-align: left;">
-                <thead>
-                  <tr style="background-color: #f3f4f6; border-bottom: 2px solid #000;">
-                    <th style="border: 1px solid #000; padding: 4px; text-align: center; width: 4%;">Sl No</th>
-                    <th style="border: 1px solid #000; padding: 4px; width: 8%;">Adm No</th>
-                    <th style="border: 1px solid #000; padding: 4px; width: 15%;">Student Name</th>
-                    <th style="border: 1px solid #000; padding: 4px; text-align: center; width: 4%;">Gen</th>
-                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Category</th>
-                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Caste</th>
-                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Religion</th>
-                    <th style="border: 1px solid #000; padding: 4px; width: 12%;">A/C No</th>
-                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Bank</th>
-                    <th style="border: 1px solid #000; padding: 4px; width: 10%;">Branch</th>
-                    <th style="border: 1px solid #000; padding: 4px; width: 7%;">IFSC</th>
-                  </tr>
-                </thead>
-                <tbody>
+              <table style="width: 100%; border-collapse: collapse; font-size: 9px; text-align: left;">
+  <thead>
+    <tr style="background-color: #f3f4f6; border-bottom: 2px solid #000;">
+      <th style="border: 1px solid #000; padding: 4px; text-align: center; width: 3%;">Sl No</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 7%;">Adm No</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 14%;">Student Name</th>
+      <th style="border: 1px solid #000; padding: 4px; text-align: center; width: 3%;">Gen</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 9%;">UID</th> <!-- UID -->
+      <th style="border: 1px solid #000; padding: 4px; width: 8%;">Category</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 8%;">Caste</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 8%;">Religion</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 11%;">A/C No</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 9%;">Bank</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 9%;">Branch</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 6%;">IFSC</th>
+      <th style="border: 1px solid #000; padding: 4px; width: 5%;">Remark</th> <!-- Remark -->
+    </tr>
+  </thead>
+  <tbody>
                   ${tableRowsHTML}
                 </tbody>
               </table>
@@ -2551,7 +2570,11 @@
           "A/C No": document.getElementById("f_ac").value,
           "Bank": document.getElementById("f_bank").value,
           "Branch": document.getElementById("f_branch").value,
-          "IFSC Code": document.getElementById("f_ifsc").value
+          "IFSC Code": document.getElementById("f_ifsc").value,
+
+          // Add these lines
+          "UID": document.getElementById("f_uid").value,
+          "Remark": document.getElementById("f_remark").value
         };
 
         const payload = {
