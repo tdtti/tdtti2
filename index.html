@@ -1574,8 +1574,8 @@
         `).join('');
 
         const categoryTableHTML = `
-          <div class="mt-4 pt-4 border-t border-gray-200 space-y-2 col-span-1 sm:col-span-2">
-            <div class="flex justify-between items-center">
+  <div class="mt-4 pt-4 border-t border-gray-200 space-y-2 col-span-1 sm:col-span-2 category-bank-details-section">
+    <div class="flex justify-between items-center">
               <h5 class="text-[11px] font-extrabold text-indigo-950 uppercase tracking-wider">Category-wise Student Profile & Bank Details</h5>
               <button onclick="printCategoryWiseTable('${cls}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1 rounded transition flex items-center gap-1">
                 🖨️ Print Landscape Roster
@@ -1848,13 +1848,20 @@
     }
 
     function printClassDemographicsCard(cls) {
-      const card = document.getElementById(`classDemoCard-${cls}`).cloneNode(true);
-      const actionHeader = card.querySelector(".flex.justify-between.items-center");
-      if (actionHeader) {
-        actionHeader.innerHTML = `<h4 style="font-size: 14px; font-weight: bold; margin: 0; text-transform: uppercase;">Class ${cls} Demographic Breakdown</h4>`;
-      }
-      executePrint(card.innerHTML, `Class ${cls} Demographic Summary`);
-    }
+  const card = document.getElementById(`classDemoCard-${cls}`).cloneNode(true);
+  
+  // Locate and remove the category/bank table from this cloned container before printing
+  const bankSection = card.querySelector(".category-bank-details-section");
+  if (bankSection) {
+    bankSection.remove();
+  }
+
+  const actionHeader = card.querySelector(".flex.justify-between.items-center");
+  if (actionHeader) {
+    actionHeader.innerHTML = `<h4 style="font-size: 14px; font-weight: bold; margin: 0; text-transform: uppercase;">Class ${cls} Demographic Breakdown</h4>`;
+  }
+  executePrint(card.innerHTML, `Class ${cls} Demographic Summary`);
+}
 
     function executePrint(contentHTML, title) {
       const printArea = document.getElementById("printArea");
